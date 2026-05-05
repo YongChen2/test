@@ -459,9 +459,15 @@ const demoListings = [
 const state = {
   listings: mergeDemoListings(load("automarketListings", [])),
   saved: load("automarketSaved", []),
+  compare: load("automarketCompare", []),
+  history: load("automarketHistory", []),
+  alerts: load("automarketAlerts", []),
+  messages: load("automarketMessages", []),
+  notes: load("automarketNotes", []),
   user: load("automarketUser", null),
   selectedPhotos: [],
   filters: {},
+  activeTab: "saved",
 };
 
 function mergeDemoListings(storedListings) {
@@ -505,6 +511,7 @@ function fillSelect(select, values, includePlaceholder = false) {
 
 function initSelects() {
   ["quickBrand", "brandFilter"].forEach((id) => fillSelect(byId(id), brands, true));
+  fillSelect(byId("alertBrand"), brands, true);
   fillSelect(byId("brandInput"), brands.slice(1));
   fillSelect(byId("fuelFilter"), fuels, true);
   fillSelect(byId("fuelInput"), fuels.slice(1));
@@ -572,8 +579,178 @@ function renderSaved() {
   byId("savedEmpty").hidden = savedListings.length > 0;
 }
 
+function renderAccount() {
+  renderAccountSummary();
+  renderSaved();
+  renderCompare();
+  renderAlerts();
+  renderMessages();
+  renderNotes();
+  renderHistory();
+  renderSellerListings();
+}
+
+function renderAccountSummary() {
+  const mine = getMyListings();
+  const views = mine.reduce((sum, car) => sum + listingStats(car).views, 0);
+  byId("accountSummary").innerHTML = `
+    <article>
+      <span>Profil</span>
+      <strong>${state.user ? state.user.email : "Neprihlasen"}</strong>
+    </article>
+    <article>
+      <span>Ulozene</span>
+      <strong>${state.saved.length}</strong>
+    </article>
+    <article>
+      <span>Porovnani</span>
+      <strong>${state.compare.length}</strong>
+    </article>
+    <article>
+      <span>Hlidani</span>
+      <strong>${state.alerts.length}</strong>
+    </article>
+    <article>
+      <span>Moje inzeraty</span>
+      <strong>${mine.length}</strong>
+    </article>
+    <article>
+      <span>Zobrazeni</span>
+      <strong>${number.format(views)}</strong>
+    </article>
+  `;
+}
+
+function renderCompare() {
+  const cars = state.compare.map(findListing).filter(Boolean);
+  const grid = byId("compareGrid");
+  grid.innerHTML = cars
+    .map(
+      (car) => `
+        <article class="compare-card">
+          <button class="text-button mini-action" data-compare-remove="${car.id}" type="button">Odebrat</button>
+          <h3>${car.brand} ${car.model}</h3>
+          <strong class="price">${currency.format(car.price)}</strong>
+          <div class="spec-grid compact">
+            ${spec("Rok", car.year)}
+            ${spec("Najeto", `${number.format(car.mileage)} km`)}
+            ${spec("Palivo", car.fuel)}
+            ${spec("Vykon", car.power ? `${car.power} kW` : "Neuvedeno")}
+            ${spec("Kraj", car.region)}
+            ${spec("STK", car.inspection || "Neuvedeno")}
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+  byId("compareEmpty").hidden = cars.length > 0;
+}
+
+function renderAlerts() {
+  byId("alertsList").innerHTML =
+    state.alerts
+      .map((alert) => {
+        const count = state.listings.filter((car) => {
+          const brand = !alert.brand || car.brand === alert.brand;
+          const price = !alert.priceMax || car.price <= alert.priceMax;
+          const mileage = !alert.mileageMax || car.mileage <= alert.mileageMax;
+          return brand && price && mileage;
+        }).length;
+        return `
+          <article class="list-item">
+            <div>
+              <h3>${alert.name}</h3>
+              <p>${alert.brand || "Vsechny znacky"} · do ${alert.priceMax ? currency.format(alert.priceMax) : "libovolne ceny"} · ${count} shod</p>
+            </div>
+            <button class="text-button" data-alert-delete="${alert.id}" type="button">Smazat</button>
+          </article>
+        `;
+      })
+      .join("") || `<div class="empty-state"><h3>Zatim zadne hlidani</h3><p>Vytvorte si filtr a AutoMarket vam v realne verzi posle upozorneni.</p></div>`;
+}
+
+function renderMessages() {
+  byId("messagesList").innerHTML = state.messages
+    .map((message) => {
+      const car = findListing(message.listingId);
+      return `
+        <article class="list-item">
+          <div>
+            <h3>${car ? `${car.brand} ${car.model}` : "Inzerat"}</h3>
+            <p>${message.text}</p>
+            <small>${message.createdAt}</small>
+          </div>
+          <button class="text-button" data-message-delete="${message.id}" type="button">Smazat</button>
+        </article>
+      `;
+    })
+    .join("");
+  byId("messagesEmpty").hidden = state.messages.length > 0;
+}
+
+function renderNotes() {
+  byId("notesList").innerHTML = state.notes
+    .map((note) => {
+      const car = findListing(note.listingId);
+      return `
+        <article class="list-item">
+          <div>
+            <h3>${car ? `${car.brand} ${car.model}` : "Inzerat"}</h3>
+            <p>${note.text}</p>
+            <small>${note.createdAt}</small>
+          </div>
+          <button class="text-button" data-note-delete="${note.id}" type="button">Smazat</button>
+        </article>
+      `;
+    })
+    .join("");
+  byId("notesEmpty").hidden = state.notes.length > 0;
+}
+
+function renderHistory() {
+  const cars = state.history.map(findListing).filter(Boolean);
+  byId("historyGrid").innerHTML = cars.map(renderCard).join("");
+  byId("historyEmpty").hidden = cars.length > 0;
+}
+
+function renderSellerListings() {
+  const mine = getMyListings();
+  byId("sellerListings").innerHTML = mine
+    .map((car) => {
+      const stats = listingStats(car);
+      return `
+        <article class="seller-item">
+          <img src="${car.photos[0] || stockPhotos[0]}" alt="${car.brand} ${car.model}" />
+          <div>
+            <div class="seller-item-head">
+              <h3>${car.brand} ${car.model}</h3>
+              <span class="tag">${car.status === "sold" ? "Prodano" : car.promoted ? "TOP" : "Aktivni"}</span>
+            </div>
+            <p>${listingCode(car)} · ${currency.format(car.price)} · ${car.region}</p>
+            <div class="metric-row">
+              <span>${number.format(stats.views)} zobrazeni</span>
+              <span>${number.format(stats.saves)} ulozeni</span>
+              <span>${number.format(stats.calls)} kliknuti na telefon</span>
+            </div>
+            <div class="seller-actions">
+              <button class="ghost-button" data-detail="${car.id}" type="button">Detail</button>
+              <button class="ghost-button" data-discount="${car.id}" type="button">Zlevnit</button>
+              <button class="ghost-button" data-photo-manage="${car.id}" type="button">Fotky</button>
+              <button class="ghost-button" data-promote="${car.id}" type="button">Topovat</button>
+              <button class="ghost-button" data-sold="${car.id}" type="button">${car.status === "sold" ? "Znovu aktivovat" : "Prodano"}</button>
+              <button class="text-button" data-delete-listing="${car.id}" type="button">Smazat</button>
+            </div>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+  byId("sellerEmpty").hidden = mine.length > 0;
+}
+
 function renderCard(car) {
   const isSaved = state.saved.includes(car.id);
+  const isCompared = state.compare.includes(car.id);
   const image = car.photos[0] || stockPhotos[0];
   return `
     <article class="car-card">
@@ -596,6 +773,8 @@ function renderCard(car) {
         </div>
         <div class="tag-row">
           <span class="tag">${listingCode(car)}</span>
+          ${car.status === "sold" ? '<span class="tag sold">Prodano</span>' : ""}
+          ${car.promoted ? '<span class="tag top">TOP</span>' : ""}
           <span class="tag">${car.body}</span>
           <span class="tag">${car.region}</span>
           ${car.vat ? '<span class="tag">Odpocet DPH</span>' : ""}
@@ -603,6 +782,9 @@ function renderCard(car) {
         </div>
         <div class="card-actions">
           <button class="ghost-button" data-detail="${car.id}" type="button">Detail</button>
+          <button class="ghost-button ${isCompared ? "active-outline" : ""}" data-compare="${car.id}" type="button">
+            ${isCompared ? "V porovnani" : "Porovnat"}
+          </button>
           <a class="primary-button" href="tel:${phoneHref(car.phone)}">Volat</a>
         </div>
       </div>
@@ -637,6 +819,24 @@ function resetFilters() {
   renderListings();
 }
 
+function findListing(id) {
+  return state.listings.find((listing) => listing.id === id);
+}
+
+function getMyListings() {
+  if (!state.user) return [];
+  return state.listings.filter((listing) => listing.ownerEmail === state.user.email);
+}
+
+function listingStats(car) {
+  const seed = Math.abs(hashCode(car.id));
+  return {
+    views: car.views ?? 80 + (seed % 940),
+    saves: state.saved.includes(car.id) ? 1 + (seed % 18) : seed % 18,
+    calls: 2 + (seed % 36),
+  };
+}
+
 function toggleSave(id) {
   if (!state.user) {
     openAccount();
@@ -648,12 +848,30 @@ function toggleSave(id) {
     : [...state.saved, id];
   save("automarketSaved", state.saved);
   renderListings();
-  renderSaved();
+  renderAccount();
+}
+
+function toggleCompare(id) {
+  if (!state.user) {
+    openAccount();
+    toast("Nejdrive se prihlaste demo uctem.");
+    return;
+  }
+  if (state.compare.includes(id)) {
+    state.compare = state.compare.filter((compareId) => compareId !== id);
+  } else {
+    if (state.compare.length >= 4) state.compare.shift();
+    state.compare = [...state.compare, id];
+  }
+  save("automarketCompare", state.compare);
+  renderListings();
+  renderAccount();
 }
 
 function showDetail(id) {
   const car = state.listings.find((listing) => listing.id === id);
   if (!car) return;
+  addToHistory(id);
 
   const thumbs = car.photos
     .slice(1, 6)
@@ -690,10 +908,28 @@ function showDetail(id) {
         </div>
         <a class="primary-button" href="tel:${phoneHref(car.phone)}">Volat ${car.phone}</a>
         <a class="ghost-button" href="mailto:${car.email}">${car.email}</a>
+        <div class="detail-actions">
+          <button class="ghost-button" data-compare="${car.id}" type="button">Porovnat</button>
+          <button class="ghost-button" data-message="${car.id}" type="button">Poslat demo zpravu</button>
+        </div>
+        <form class="note-form" data-note-form="${car.id}">
+          <label>
+            Poznamka k autu
+            <textarea rows="3" name="note" required placeholder="Volat v patek, proverit STK..."></textarea>
+          </label>
+          <button class="primary-button" type="submit">Ulozit poznamku</button>
+        </form>
       </div>
     </div>
   `;
   byId("detailModal").showModal();
+}
+
+function addToHistory(id) {
+  state.history = [id, ...state.history.filter((historyId) => historyId !== id)].slice(0, 12);
+  save("automarketHistory", state.history);
+  renderHistory();
+  renderAccountSummary();
 }
 
 function spec(label, value) {
@@ -737,6 +973,7 @@ function handleAccountSubmit(event) {
   };
   save("automarketUser", state.user);
   updateAccountButton();
+  renderAccount();
   byId("accountModal").close();
   toast("Demo ucet je pripraveny.");
 }
@@ -795,18 +1032,163 @@ function handleListingSubmit(event) {
     email: byId("emailInput").value.trim(),
     description: byId("descriptionInput").value.trim(),
     photos: state.selectedPhotos.length ? state.selectedPhotos : [stockPhotos[5]],
+    ownerEmail: state.user.email,
+    ownerPhone: state.user.phone,
+    status: "active",
+    promoted: false,
+    views: 0,
     createdAt: new Date().toISOString(),
   };
 
   state.listings = [listing, ...state.listings];
-  save("automarketListings", state.listings);
+  saveCustomListings();
   event.target.reset();
   state.selectedPhotos = [];
   renderPhotoPreview();
   resetFilters();
-  renderSaved();
+  renderAccount();
   toast("Inzerat byl zverejneny v demo nabidce.");
   location.hash = "#nabidka";
+}
+
+function saveCustomListings() {
+  save(
+    "automarketListings",
+    state.listings.filter((listing) => !String(listing.id).startsWith("demo-")),
+  );
+}
+
+function handleAlertSubmit(event) {
+  event.preventDefault();
+  if (!state.user) {
+    openAccount();
+    toast("Nejdrive se prihlaste demo uctem.");
+    return;
+  }
+  state.alerts = [
+    {
+      id: makeId(),
+      name: byId("alertName").value.trim(),
+      brand: byId("alertBrand").value,
+      priceMax: readNumber("alertPrice"),
+      mileageMax: readNumber("alertMileage"),
+      createdAt: new Date().toLocaleString("cs-CZ"),
+    },
+    ...state.alerts,
+  ];
+  save("automarketAlerts", state.alerts);
+  event.target.reset();
+  renderAccount();
+  toast("Hlidani bylo vytvoreno.");
+}
+
+function sendDemoMessage(id) {
+  if (!state.user) {
+    openAccount();
+    toast("Nejdrive se prihlaste demo uctem.");
+    return;
+  }
+  const car = findListing(id);
+  state.messages = [
+    {
+      id: makeId(),
+      listingId: id,
+      text: `Dobry den, mam zajem o ${car ? `${car.brand} ${car.model}` : "vas inzerat"}. Je auto jeste k dispozici?`,
+      createdAt: new Date().toLocaleString("cs-CZ"),
+    },
+    ...state.messages,
+  ];
+  save("automarketMessages", state.messages);
+  renderAccount();
+  toast("Demo zprava je ulozena v uctu.");
+}
+
+function addNote(id, text) {
+  if (!state.user) {
+    openAccount();
+    toast("Nejdrive se prihlaste demo uctem.");
+    return;
+  }
+  state.notes = [
+    { id: makeId(), listingId: id, text, createdAt: new Date().toLocaleString("cs-CZ") },
+    ...state.notes,
+  ];
+  save("automarketNotes", state.notes);
+  renderAccount();
+  toast("Poznamka ulozena.");
+}
+
+function deleteById(collection, id, storageKey) {
+  state[collection] = state[collection].filter((item) => item.id !== id);
+  save(storageKey, state[collection]);
+  renderAccount();
+}
+
+function toggleSold(id) {
+  const car = findListing(id);
+  if (!car) return;
+  car.status = car.status === "sold" ? "active" : "sold";
+  saveCustomListings();
+  renderListings();
+  renderAccount();
+}
+
+function promoteListing(id) {
+  const car = findListing(id);
+  if (!car) return;
+  car.promoted = true;
+  saveCustomListings();
+  renderListings();
+  renderAccount();
+  toast("Inzerat je v demo rezimu oznaceny jako TOP.");
+}
+
+function discountListing(id) {
+  const car = findListing(id);
+  if (!car) return;
+  car.price = Math.max(0, car.price - 10000);
+  saveCustomListings();
+  renderListings();
+  renderAccount();
+  toast("Cena inzeratu byla v demo rezimu snizena o 10 000 Kc.");
+}
+
+function deleteListing(id) {
+  state.listings = state.listings.filter((listing) => listing.id !== id);
+  state.saved = state.saved.filter((savedId) => savedId !== id);
+  state.compare = state.compare.filter((compareId) => compareId !== id);
+  state.history = state.history.filter((historyId) => historyId !== id);
+  saveCustomListings();
+  save("automarketSaved", state.saved);
+  save("automarketCompare", state.compare);
+  save("automarketHistory", state.history);
+  renderListings();
+  renderAccount();
+}
+
+function createDemoMine() {
+  if (!state.user) {
+    openAccount();
+    toast("Nejdrive se prihlaste demo uctem.");
+    return;
+  }
+  const demoMine = {
+    ...demoListings[0],
+    id: makeId(),
+    model: "Octavia Combi 2.0 TDI Style",
+    price: 449000,
+    ownerEmail: state.user.email,
+    ownerPhone: state.user.phone,
+    status: "active",
+    promoted: false,
+    views: 126,
+    createdAt: new Date().toISOString(),
+  };
+  state.listings = [demoMine, ...state.listings];
+  saveCustomListings();
+  renderListings();
+  renderAccount();
+  toast("Demo inzerat byl pridan do sekce Moje inzeraty.");
 }
 
 function toast(message) {
@@ -815,6 +1197,16 @@ function toast(message) {
   element.classList.add("show");
   clearTimeout(toast.timer);
   toast.timer = setTimeout(() => element.classList.remove("show"), 2600);
+}
+
+function switchTab(tab) {
+  state.activeTab = tab;
+  document.querySelectorAll(".tab-button").forEach((button) => {
+    button.classList.toggle("active", button.dataset.tab === tab);
+  });
+  document.querySelectorAll(".tab-panel").forEach((panel) => {
+    panel.classList.toggle("active", panel.dataset.panel === tab);
+  });
 }
 
 function bindEvents() {
@@ -834,17 +1226,53 @@ function bindEvents() {
     location.hash = "#nabidka";
   });
   byId("accountButton").addEventListener("click", openAccount);
+  byId("accountPanelButton").addEventListener("click", openAccount);
   byId("accountForm").addEventListener("submit", handleAccountSubmit);
   byId("closeAccount").addEventListener("click", () => byId("accountModal").close());
   byId("photosInput").addEventListener("change", handlePhotos);
   byId("listingForm").addEventListener("submit", handleListingSubmit);
+  byId("alertForm").addEventListener("submit", handleAlertSubmit);
+  byId("createDemoMine").addEventListener("click", createDemoMine);
+  byId("fakeInvoice").addEventListener("click", () => toast("Demo faktura AM-2026-001 je pripravena."));
   byId("closeDetail").addEventListener("click", () => byId("detailModal").close());
 
   document.addEventListener("click", (event) => {
     const saveButton = event.target.closest("[data-save]");
     const detailButton = event.target.closest("[data-detail]");
+    const compareButton = event.target.closest("[data-compare]");
+    const compareRemove = event.target.closest("[data-compare-remove]");
+    const messageButton = event.target.closest("[data-message]");
+    const tabButton = event.target.closest("[data-tab]");
+    const alertDelete = event.target.closest("[data-alert-delete]");
+    const messageDelete = event.target.closest("[data-message-delete]");
+    const noteDelete = event.target.closest("[data-note-delete]");
+    const soldButton = event.target.closest("[data-sold]");
+    const promoteButton = event.target.closest("[data-promote]");
+    const discountButton = event.target.closest("[data-discount]");
+    const photoManageButton = event.target.closest("[data-photo-manage]");
+    const deleteButton = event.target.closest("[data-delete-listing]");
     if (saveButton) toggleSave(saveButton.dataset.save);
     if (detailButton) showDetail(detailButton.dataset.detail);
+    if (compareButton) toggleCompare(compareButton.dataset.compare);
+    if (compareRemove) toggleCompare(compareRemove.dataset.compareRemove);
+    if (messageButton) sendDemoMessage(messageButton.dataset.message);
+    if (tabButton) switchTab(tabButton.dataset.tab);
+    if (alertDelete) deleteById("alerts", alertDelete.dataset.alertDelete, "automarketAlerts");
+    if (messageDelete) deleteById("messages", messageDelete.dataset.messageDelete, "automarketMessages");
+    if (noteDelete) deleteById("notes", noteDelete.dataset.noteDelete, "automarketNotes");
+    if (soldButton) toggleSold(soldButton.dataset.sold);
+    if (promoteButton) promoteListing(promoteButton.dataset.promote);
+    if (discountButton) discountListing(discountButton.dataset.discount);
+    if (photoManageButton) toast("Sprava fotek bude v realne verzi menit poradi a mazat snimky.");
+    if (deleteButton) deleteListing(deleteButton.dataset.deleteListing);
+  });
+
+  document.addEventListener("submit", (event) => {
+    const noteForm = event.target.closest("[data-note-form]");
+    if (!noteForm) return;
+    event.preventDefault();
+    addNote(noteForm.dataset.noteForm, new FormData(noteForm).get("note").trim());
+    noteForm.reset();
   });
 }
 
@@ -853,7 +1281,8 @@ function boot() {
   bindEvents();
   updateAccountButton();
   renderListings();
-  renderSaved();
+  renderAccount();
+  switchTab(state.activeTab);
 }
 
 boot();

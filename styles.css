@@ -438,12 +438,26 @@ textarea:focus {
 
 .card-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
 }
 
-.seller-section,
-.saved-section {
+.active-outline {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.tag.top {
+  color: #7a4b00;
+  background: #fff1cf;
+}
+
+.tag.sold {
+  color: #7a1d16;
+  background: #ffe4df;
+}
+
+.seller-section {
   display: grid;
   grid-template-columns: minmax(250px, 420px) minmax(0, 1fr);
   gap: clamp(24px, 5vw, 70px);
@@ -502,9 +516,198 @@ textarea:focus {
   border-radius: 8px;
 }
 
-.saved-section {
+.account-section {
   grid-template-columns: 1fr;
   background: var(--paper);
+}
+
+.account-section {
+  display: grid;
+  gap: 22px;
+  padding: clamp(36px, 6vw, 72px) clamp(18px, 4vw, 58px);
+  border-top: 1px solid var(--line);
+}
+
+.account-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.account-summary {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.account-summary article,
+.compare-card,
+.promo-card,
+.invoice-box,
+.list-item,
+.seller-item {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(24, 33, 45, 0.05);
+}
+
+.account-summary article {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+}
+
+.account-summary span,
+.list-item small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.account-summary strong {
+  overflow: hidden;
+  font-size: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.tab-button {
+  min-height: 40px;
+  padding: 0 14px;
+  color: var(--muted);
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.tab-button.active {
+  color: white;
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: grid;
+  gap: 16px;
+}
+
+.compact-form {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.compare-grid,
+.promo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.compare-card,
+.promo-card,
+.invoice-box {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.mini-action {
+  justify-self: end;
+  min-height: 32px;
+}
+
+.spec-grid.compact {
+  grid-template-columns: 1fr;
+}
+
+.list-stack {
+  display: grid;
+  gap: 12px;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+}
+
+.list-item p,
+.promo-card p,
+.invoice-box p,
+.seller-item p {
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.seller-tools,
+.seller-actions,
+.detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.seller-item {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 16px;
+  padding: 14px;
+}
+
+.seller-item img {
+  width: 100%;
+  height: 112px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.seller-item-head,
+.metric-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.metric-row {
+  justify-content: flex-start;
+  margin: 12px 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.note-form {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: 8px;
 }
 
 .empty-state {
@@ -646,6 +849,15 @@ textarea:focus {
     grid-template-columns: 1fr;
   }
 
+  .account-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .account-summary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .filters,
   .seller-copy {
     position: static;
@@ -670,6 +882,7 @@ textarea:focus {
   }
 
   .stats-band,
+  .account-summary,
   .input-grid,
   .form-row,
   .listings-head {
@@ -681,7 +894,8 @@ textarea:focus {
   }
 
   .sort-control,
-  .card-actions {
+  .card-actions,
+  .seller-item {
     width: 100%;
     grid-template-columns: 1fr;
   }
