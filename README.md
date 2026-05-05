@@ -7,6 +7,7 @@ Demo web pro ceskou inzerci aut.
 - vice strankova struktura: domovska stranka, nabidka, prodej auta, muj ucet a bezpecnost
 - prochazeni inzeratu aut
 - filtrovani podle znacky, modelu, ceny, roku, najezdu, paliva, prevodovky a kraje
+- rozsirene filtry inspirovane auto-bazarem: stav vozidla, tachometr, karoserie, pohon, vykon, objem, vybava, spotreba, klimatizace, airbagy, mista, dvere, barva, misto prodeje, zeme puvodu, typ prodejce, overeni, historie a stari inzeratu
 - napoveda modelu podle vybrane znacky
 - mobilni vysouvaci filtry
 - detail inzeratu s parametry, kontaktem a fotkami

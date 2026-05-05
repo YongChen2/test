@@ -32,24 +32,56 @@
             <h2>Filtry</h2>
           </div>
           <form id="filtersForm">
-            <label>Znacka <select id="brandFilter"></select></label>
-            <label>
-              Model
-              <input id="modelFilter" type="search" list="modelSuggestions" placeholder="Octavia, Golf..." />
-              <datalist id="modelSuggestions"></datalist>
-            </label>
-            <div class="input-grid">
-              <label>Cena od <input id="priceMinFilter" type="number" min="0" step="10000" /></label>
-              <label>Cena do <input id="priceMaxFilter" type="number" min="0" step="10000" /></label>
-            </div>
-            <div class="input-grid">
-              <label>Rok od <input id="yearMinFilter" type="number" min="1980" max="2026" /></label>
-              <label>Rok do <input id="yearMaxFilter" type="number" min="1980" max="2026" /></label>
-            </div>
-            <label>Najeto do <input id="mileageMaxFilter" type="number" min="0" step="5000" /></label>
-            <label>Palivo <select id="fuelFilter"></select></label>
-            <label>Prevodovka <select id="transmissionFilter"></select></label>
-            <label>Kraj <select id="regionFilter"></select></label>
+            <details class="filter-group" open>
+              <summary>Vyhledat v inzeratech</summary>
+              <label>Text <input id="listingSearchFilter" type="search" placeholder="Scout, RS, GTI..." /></label>
+              <label>Znacka <select id="brandFilter"></select></label>
+              <label>
+                Model
+                <input id="modelFilter" type="search" list="modelSuggestions" placeholder="Octavia, Golf..." />
+                <datalist id="modelSuggestions"></datalist>
+              </label>
+            </details>
+            <details class="filter-group"><summary>Stav vozidla</summary><label>Stav <select id="conditionFilter"></select></label></details>
+            <details class="filter-group" open>
+              <summary>Cena</summary>
+              <div class="input-grid">
+                <label>Cena od <input id="priceMinFilter" type="number" min="0" step="10000" /></label>
+                <label>Cena do <input id="priceMaxFilter" type="number" min="0" step="10000" /></label>
+              </div>
+            </details>
+            <details class="filter-group" open>
+              <summary>Rok vyroby</summary>
+              <div class="input-grid">
+                <label>Rok od <input id="yearMinFilter" type="number" min="1980" max="2026" /></label>
+                <label>Rok do <input id="yearMaxFilter" type="number" min="1980" max="2026" /></label>
+              </div>
+            </details>
+            <details class="filter-group" open>
+              <summary>Stav tachometru</summary>
+              <label>Najeto do <input id="mileageMaxFilter" type="number" min="0" step="5000" /></label>
+              <label>Tachometr <select id="tachometerFilter"></select></label>
+            </details>
+            <details class="filter-group"><summary>Palivo</summary><label>Palivo <select id="fuelFilter"></select></label></details>
+            <details class="filter-group"><summary>Karoserie</summary><label>Karoserie <select id="bodyFilter"></select></label></details>
+            <details class="filter-group"><summary>Prevodovka</summary><label>Prevodovka <select id="transmissionFilter"></select></label></details>
+            <details class="filter-group"><summary>Pohon kol</summary><label>Pohon <select id="drivetrainFilter"></select></label></details>
+            <details class="filter-group"><summary>Vykon</summary><div class="input-grid"><label>kW od <input id="powerMinFilter" type="number" min="0" step="10" /></label><label>kW do <input id="powerMaxFilter" type="number" min="0" step="10" /></label></div></details>
+            <details class="filter-group"><summary>Objem</summary><div class="input-grid"><label>ccm od <input id="engineMinFilter" type="number" min="0" step="100" /></label><label>ccm do <input id="engineMaxFilter" type="number" min="0" step="100" /></label></div></details>
+            <details class="filter-group"><summary>Vybava</summary><div class="check-list"><label><input type="checkbox" name="equipmentFilter" value="Navigace" /> Navigace</label><label><input type="checkbox" name="equipmentFilter" value="LED svetla" /> LED svetla</label><label><input type="checkbox" name="equipmentFilter" value="Tempomat" /> Tempomat</label><label><input type="checkbox" name="equipmentFilter" value="Parkovaci kamera" /> Parkovaci kamera</label><label><input type="checkbox" name="equipmentFilter" value="Tazne zarizeni" /> Tazne zarizeni</label><label><input type="checkbox" name="equipmentFilter" value="Vyhrivana sedadla" /> Vyhrivana sedadla</label></div></details>
+            <details class="filter-group"><summary>Spotreba</summary><label>Spotreba do <input id="consumptionMaxFilter" type="number" min="0" step="0.1" /></label></details>
+            <details class="filter-group"><summary>Klimatizace</summary><label>Klimatizace <select id="acFilter"></select></label></details>
+            <details class="filter-group"><summary>Pocet airbagu</summary><label>Airbagu od <input id="airbagsMinFilter" type="number" min="0" step="1" /></label></details>
+            <details class="filter-group"><summary>Pocet mist</summary><label>Mist od <input id="seatsMinFilter" type="number" min="1" step="1" /></label></details>
+            <details class="filter-group"><summary>Pocet dveri</summary><label>Dveri od <input id="doorsMinFilter" type="number" min="1" step="1" /></label></details>
+            <details class="filter-group"><summary>Barva</summary><label>Barva <input id="colorFilter" type="search" placeholder="bila, cerna..." /></label></details>
+            <details class="filter-group"><summary>Misto prodeje</summary><label>Mesto <select id="salePlaceFilter"></select></label><label>Kraj <select id="regionFilter"></select></label></details>
+            <details class="filter-group"><summary>Zeme puvodu</summary><label>Zeme <select id="originCountryFilter"></select></label></details>
+            <details class="filter-group"><summary>Typ prodejce</summary><label>Typ <select id="sellerTypeFilter"></select></label></details>
+            <details class="filter-group"><summary>Overovaci programy</summary><div class="check-list"><label><input type="checkbox" name="verificationFilter" value="Overeny telefon" /> Overeny telefon</label><label><input type="checkbox" name="verificationFilter" value="Overeny e-mail" /> Overeny e-mail</label><label><input type="checkbox" name="verificationFilter" value="Overeny prodejce" /> Overeny prodejce</label><label><input type="checkbox" name="verificationFilter" value="Kontrola VIN" /> Kontrola VIN</label></div></details>
+            <details class="filter-group"><summary>Historie vozidla</summary><div class="check-list"><label><input type="checkbox" name="historyFilter" value="Servisni historie" /> Servisni historie</label><label><input type="checkbox" name="historyFilter" value="Nehavarovane" /> Nehavarovane</label><label><input type="checkbox" name="historyFilter" value="Po prvnim majiteli" /> Po prvnim majiteli</label><label><input type="checkbox" name="historyFilter" value="Garance puvodu" /> Garance puvodu</label></div></details>
+            <details class="filter-group"><summary>Stari inzeratu</summary><label>Stari <select id="listingAgeFilter"></select></label></details>
+            <details class="filter-group"><summary>Pro zdravotne postizene</summary><label class="checkbox-row"><input id="disabledAccessFilter" type="checkbox" /> Uprava / vhodne pro prestavbu</label></details>
             <label class="checkbox-row"><input id="noCrashFilter" type="checkbox" /> Pouze nebourane</label>
             <div class="filter-actions">
               <button class="primary-button" type="submit">Pouzit filtry</button>

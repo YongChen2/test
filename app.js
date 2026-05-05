@@ -32,6 +32,17 @@ const brandModels = {
 const fuels = ["Vse", "Benzin", "Nafta", "Hybrid", "Elektro", "LPG"];
 const transmissions = ["Vse", "Manual", "Automat"];
 const bodies = ["Hatchback", "Kombi", "Sedan", "SUV", "Coupe", "MPV", "Dodavka"];
+const conditions = ["Vse", "Nove", "Predvadeci", "Ojete", "Veteran"];
+const tachometerStates = ["Vse", "Overeny", "Po servisu", "Neovereny"];
+const drivetrains = ["Vse", "Predni", "Zadni", "4x4"];
+const equipmentOptions = ["Navigace", "LED svetla", "Tempomat", "Parkovaci kamera", "Tazne zarizeni", "Vyhrivana sedadla"];
+const acOptions = ["Vse", "Bez klimatizace", "Manualni", "Automaticka", "Dvouzónova"];
+const salePlaces = ["Vse", "Praha", "Brno", "Ostrava", "Plzen", "Hradec Kralove", "Olomouc"];
+const originCountries = ["Vse", "Ceska republika", "Nemecko", "Rakousko", "Italie", "Francie"];
+const sellerTypes = ["Vse", "Soukromy prodejce", "Autobazar", "Dealer"];
+const verificationPrograms = ["Overeny telefon", "Overeny e-mail", "Overeny prodejce", "Kontrola VIN"];
+const vehicleHistoryOptions = ["Servisni historie", "Nehavarovane", "Po prvnim majiteli", "Garance puvodu"];
+const listingAgeOptions = ["Vse", "Dnes", "Do 3 dnu", "Do 7 dnu", "Do 30 dnu"];
 const regions = [
   "Vse",
   "Praha",
@@ -487,7 +498,45 @@ const state = {
 
 function mergeDemoListings(storedListings) {
   const customListings = storedListings.filter((listing) => !String(listing.id).startsWith("demo-"));
-  return [...demoListings, ...customListings];
+  return [...demoListings, ...customListings].map(enrichListing);
+}
+
+function enrichListing(listing) {
+  const seed = Math.abs(hashCode(listing.id));
+  const pick = (values) => values[seed % values.length];
+  const equipment = equipmentOptions.filter((_, index) => (seed + index) % 2 === 0).slice(0, 4);
+  const verification = [
+    listing.verifiedPhone !== false ? "Overeny telefon" : null,
+    listing.verifiedEmail !== false ? "Overeny e-mail" : null,
+    listing.vin ? "Kontrola VIN" : null,
+    listing.sellerType === "Dealer" || listing.sellerType === "Autobazar" ? "Overeny prodejce" : null,
+  ].filter(Boolean);
+  const history = [
+    listing.serviceBook ? "Servisni historie" : null,
+    !listing.crashed ? "Nehavarovane" : null,
+    listing.owners === 1 ? "Po prvnim majiteli" : null,
+    listing.vin ? "Garance puvodu" : null,
+  ].filter(Boolean);
+
+  return {
+    condition: listing.year >= 2023 ? "Predvadeci" : listing.year <= 1995 ? "Veteran" : "Ojete",
+    tachometerState: listing.vin ? "Overeny" : "Neovereny",
+    drivetrain: listing.model?.toLowerCase().includes("4x4") || listing.model?.toLowerCase().includes("quattro") || listing.model?.toLowerCase().includes("xdrive") ? "4x4" : pick(["Predni", "Zadni"]),
+    engineVolume: listing.fuel === "Elektro" ? 0 : pick([999, 1498, 1598, 1968, 1998, 2993]),
+    equipment,
+    consumption: listing.fuel === "Elektro" ? 0 : pick([4.6, 5.1, 5.8, 6.4, 7.2, 8.1]),
+    ac: pick(["Manualni", "Automaticka", "Dvouzónova"]),
+    airbags: pick([4, 6, 7, 8, 10]),
+    seats: listing.body === "Dodavka" ? 3 : listing.body === "SUV" && seed % 3 === 0 ? 7 : 5,
+    doors: listing.body === "Coupe" ? 3 : listing.body === "Dodavka" ? 4 : 5,
+    salePlace: listing.region === "Praha" ? "Praha" : pick(salePlaces.slice(1)),
+    originCountry: pick(originCountries.slice(1)),
+    sellerType: listing.sellerType || pick(["Soukromy prodejce", "Autobazar", "Dealer"]),
+    verificationPrograms: verification,
+    vehicleHistory: history,
+    disabledAccess: listing.body === "MPV" || listing.body === "Dodavka",
+    ...listing,
+  };
 }
 
 const currency = new Intl.NumberFormat("cs-CZ", {
@@ -534,8 +583,17 @@ function initSelects() {
   fillSelect(byId("transmissionFilter"), transmissions, true);
   fillSelect(byId("transmissionInput"), transmissions.slice(1));
   fillSelect(byId("bodyInput"), bodies);
+  fillSelect(byId("bodyFilter"), ["Vse", ...bodies], true);
   fillSelect(byId("regionFilter"), regions, true);
   fillSelect(byId("regionInput"), regions.slice(1));
+  fillSelect(byId("conditionFilter"), conditions, true);
+  fillSelect(byId("tachometerFilter"), tachometerStates, true);
+  fillSelect(byId("drivetrainFilter"), drivetrains, true);
+  fillSelect(byId("acFilter"), acOptions, true);
+  fillSelect(byId("salePlaceFilter"), salePlaces, true);
+  fillSelect(byId("originCountryFilter"), originCountries, true);
+  fillSelect(byId("sellerTypeFilter"), sellerTypes, true);
+  fillSelect(byId("listingAgeFilter"), listingAgeOptions, true);
   updateModelSuggestions("brandFilter", "modelSuggestions");
   updateModelSuggestions("brandInput", "sellerModelSuggestions");
 }
@@ -552,29 +610,76 @@ function updateModelSuggestions(brandSelectId, datalistId) {
 function getFilteredListings() {
   const f = state.filters;
   let listings = [...state.listings].filter((car) => {
+    const searchable = `${car.brand} ${car.model} ${car.description} ${car.color} ${listingCode(car)}`.toLowerCase();
     const matchesBrand = !f.brand || car.brand === f.brand;
     const matchesModel = !f.model || car.model.toLowerCase().includes(f.model.toLowerCase());
+    const matchesSearch = !f.search || searchable.includes(f.search.toLowerCase());
     const matchesPriceMin = !f.priceMin || car.price >= f.priceMin;
     const matchesPriceMax = !f.priceMax || car.price <= f.priceMax;
     const matchesYearMin = !f.yearMin || car.year >= f.yearMin;
     const matchesYearMax = !f.yearMax || car.year <= f.yearMax;
     const matchesMileage = !f.mileageMax || car.mileage <= f.mileageMax;
     const matchesFuel = !f.fuel || car.fuel === f.fuel;
+    const matchesBody = !f.body || car.body === f.body;
     const matchesTransmission = !f.transmission || car.transmission === f.transmission;
     const matchesRegion = !f.region || car.region === f.region;
     const matchesCrash = !f.noCrash || !car.crashed;
+    const matchesCondition = !f.condition || car.condition === f.condition;
+    const matchesTachometer = !f.tachometer || car.tachometerState === f.tachometer;
+    const matchesDrivetrain = !f.drivetrain || car.drivetrain === f.drivetrain;
+    const matchesPowerMin = !f.powerMin || car.power >= f.powerMin;
+    const matchesPowerMax = !f.powerMax || car.power <= f.powerMax;
+    const matchesEngineMin = !f.engineMin || car.engineVolume >= f.engineMin;
+    const matchesEngineMax = !f.engineMax || car.engineVolume <= f.engineMax;
+    const matchesEquipment = !f.equipment.length || f.equipment.every((item) => car.equipment.includes(item));
+    const matchesConsumption = !f.consumptionMax || car.consumption <= f.consumptionMax;
+    const matchesAc = !f.ac || car.ac === f.ac;
+    const matchesAirbags = !f.airbagsMin || car.airbags >= f.airbagsMin;
+    const matchesSeats = !f.seatsMin || car.seats >= f.seatsMin;
+    const matchesDoors = !f.doorsMin || car.doors >= f.doorsMin;
+    const matchesColor = !f.color || car.color.toLowerCase().includes(f.color.toLowerCase());
+    const matchesSalePlace = !f.salePlace || car.salePlace === f.salePlace;
+    const matchesOrigin = !f.originCountry || car.originCountry === f.originCountry;
+    const matchesSellerType = !f.sellerType || car.sellerType === f.sellerType;
+    const matchesVerification = !f.verification.length || f.verification.every((item) => car.verificationPrograms.includes(item));
+    const matchesHistory = !f.history.length || f.history.every((item) => car.vehicleHistory.includes(item));
+    const matchesAge = matchesListingAge(car, f.listingAge);
+    const matchesDisabled = !f.disabledAccess || car.disabledAccess;
     return (
       matchesBrand &&
       matchesModel &&
+      matchesSearch &&
       matchesPriceMin &&
       matchesPriceMax &&
       matchesYearMin &&
       matchesYearMax &&
       matchesMileage &&
       matchesFuel &&
+      matchesBody &&
       matchesTransmission &&
       matchesRegion &&
-      matchesCrash
+      matchesCrash &&
+      matchesCondition &&
+      matchesTachometer &&
+      matchesDrivetrain &&
+      matchesPowerMin &&
+      matchesPowerMax &&
+      matchesEngineMin &&
+      matchesEngineMax &&
+      matchesEquipment &&
+      matchesConsumption &&
+      matchesAc &&
+      matchesAirbags &&
+      matchesSeats &&
+      matchesDoors &&
+      matchesColor &&
+      matchesSalePlace &&
+      matchesOrigin &&
+      matchesSellerType &&
+      matchesVerification &&
+      matchesHistory &&
+      matchesAge &&
+      matchesDisabled
     );
   });
 
@@ -819,6 +924,8 @@ function renderCard(car) {
           <span>${number.format(car.mileage)} km</span>
           <span>${car.fuel}</span>
           <span>${car.transmission}</span>
+          <span>${car.drivetrain}</span>
+          <span>${car.power} kW</span>
         </div>
         <div class="tag-row">
           <span class="tag">${listingCode(car)}</span>
@@ -827,6 +934,7 @@ function renderCard(car) {
           <span class="tag trust">${trust}</span>
           <span class="tag">${car.body}</span>
           <span class="tag">${car.region}</span>
+          <span class="tag">${car.sellerType}</span>
           ${car.vat ? '<span class="tag">Odpocet DPH</span>' : ""}
           ${!car.crashed ? '<span class="tag">Nebourane</span>' : ""}
         </div>
@@ -844,6 +952,7 @@ function renderCard(car) {
 
 function collectFilters() {
   state.filters = {
+    search: byId("listingSearchFilter")?.value.trim() || "",
     brand: byId("brandFilter")?.value || "",
     model: byId("modelFilter")?.value.trim() || "",
     priceMin: readNumber("priceMinFilter"),
@@ -852,10 +961,46 @@ function collectFilters() {
     yearMax: readNumber("yearMaxFilter"),
     mileageMax: readNumber("mileageMaxFilter"),
     fuel: byId("fuelFilter")?.value || "",
+    body: byId("bodyFilter")?.value || "",
     transmission: byId("transmissionFilter")?.value || "",
     region: byId("regionFilter")?.value || "",
+    condition: byId("conditionFilter")?.value || "",
+    tachometer: byId("tachometerFilter")?.value || "",
+    drivetrain: byId("drivetrainFilter")?.value || "",
+    powerMin: readNumber("powerMinFilter"),
+    powerMax: readNumber("powerMaxFilter"),
+    engineMin: readNumber("engineMinFilter"),
+    engineMax: readNumber("engineMaxFilter"),
+    equipment: checkedValues("equipmentFilter"),
+    consumptionMax: readNumber("consumptionMaxFilter"),
+    ac: byId("acFilter")?.value || "",
+    airbagsMin: readNumber("airbagsMinFilter"),
+    seatsMin: readNumber("seatsMinFilter"),
+    doorsMin: readNumber("doorsMinFilter"),
+    color: byId("colorFilter")?.value.trim() || "",
+    salePlace: byId("salePlaceFilter")?.value || "",
+    originCountry: byId("originCountryFilter")?.value || "",
+    sellerType: byId("sellerTypeFilter")?.value || "",
+    verification: checkedValues("verificationFilter"),
+    history: checkedValues("historyFilter"),
+    listingAge: byId("listingAgeFilter")?.value || "",
+    disabledAccess: byId("disabledAccessFilter")?.checked || false,
     noCrash: byId("noCrashFilter")?.checked || false,
   };
+}
+
+function checkedValues(name) {
+  return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map((input) => input.value);
+}
+
+function matchesListingAge(car, value) {
+  if (!value) return true;
+  const ageDays = (Date.now() - new Date(car.createdAt).getTime()) / 86400000;
+  if (value === "Dnes") return ageDays <= 1;
+  if (value === "Do 3 dnu") return ageDays <= 3;
+  if (value === "Do 7 dnu") return ageDays <= 7;
+  if (value === "Do 30 dnu") return ageDays <= 30;
+  return true;
 }
 
 function readNumber(id) {
@@ -958,8 +1103,16 @@ function showDetail(id) {
           ${spec("Palivo", car.fuel)}
           ${spec("Prevodovka", car.transmission)}
           ${spec("Karoserie", car.body)}
+          ${spec("Pohon", car.drivetrain)}
           ${spec("Vykon", car.power ? `${car.power} kW` : "Neuvedeno")}
+          ${spec("Objem", car.engineVolume ? `${number.format(car.engineVolume)} ccm` : "Elektro")}
+          ${spec("Spotreba", car.consumption ? `${car.consumption} l/100 km` : "0")}
+          ${spec("Klimatizace", car.ac)}
+          ${spec("Airbagy", car.airbags)}
+          ${spec("Mista / dvere", `${car.seats} / ${car.doors}`)}
           ${spec("Barva", car.color || "Neuvedeno")}
+          ${spec("Zeme puvodu", car.originCountry)}
+          ${spec("Typ prodejce", car.sellerType)}
           ${spec("STK", car.inspection || "Neuvedeno")}
           ${spec("Majitele", car.owners || "Neuvedeno")}
           ${spec("VIN", car.vin || "Neuvedeno")}
