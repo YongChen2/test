@@ -457,6 +457,16 @@ textarea:focus {
   background: #ffe4df;
 }
 
+.tag.trust {
+  color: #064e3b;
+  background: #d1fae5;
+}
+
+.mobile-filter-button {
+  display: none;
+  margin-bottom: 14px;
+}
+
 .seller-section {
   display: grid;
   grid-template-columns: minmax(250px, 420px) minmax(0, 1fr);
@@ -477,8 +487,37 @@ textarea:focus {
   line-height: 1.7;
 }
 
+.seller-steps {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.seller-steps span {
+  padding: 10px 12px;
+  color: var(--ink);
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-weight: 900;
+}
+
 .seller-form {
   padding: clamp(18px, 3vw, 30px);
+}
+
+.form-block {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.form-block h3 {
+  margin-bottom: 0;
+  font-size: 18px;
 }
 
 .switch-row {
@@ -670,6 +709,46 @@ textarea:focus {
   gap: 10px;
 }
 
+.report-button {
+  justify-content: flex-start;
+  min-height: 34px;
+  color: var(--danger);
+}
+
+.trust-section {
+  display: grid;
+  grid-template-columns: minmax(260px, 420px) minmax(0, 1fr);
+  gap: clamp(22px, 5vw, 62px);
+  padding: clamp(36px, 6vw, 72px) clamp(18px, 4vw, 58px);
+  background: white;
+  border-top: 1px solid var(--line);
+}
+
+.trust-section p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.trust-grid article {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.trust-grid span {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
 .seller-item {
   display: grid;
   grid-template-columns: 150px minmax(0, 1fr);
@@ -845,6 +924,7 @@ textarea:focus {
   .hero,
   .market-layout,
   .seller-section,
+  .trust-section,
   .detail-hero {
     grid-template-columns: 1fr;
   }
@@ -881,8 +961,27 @@ textarea:focus {
     padding-top: 58px;
   }
 
+  .mobile-filter-button {
+    display: inline-flex;
+  }
+
+  .filters {
+    position: fixed;
+    inset: 0 0 0 auto;
+    z-index: 35;
+    width: min(88vw, 360px);
+    overflow-y: auto;
+    transform: translateX(105%);
+    transition: transform 0.2s ease;
+  }
+
+  body.filters-open .filters {
+    transform: translateX(0);
+  }
+
   .stats-band,
   .account-summary,
+  .trust-grid,
   .input-grid,
   .form-row,
   .listings-head {

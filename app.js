@@ -14,6 +14,21 @@ const brands = [
   "Volvo",
 ];
 
+const brandModels = {
+  Skoda: ["Fabia", "Octavia", "Superb", "Kamiq", "Karoq", "Kodiaq", "Enyaq"],
+  Volkswagen: ["Golf", "Passat", "Tiguan", "Touareg", "Touran", "Transporter", "ID.4"],
+  BMW: ["i3", "320d", "330i", "520d", "X1", "X3", "X5"],
+  Audi: ["A3", "A4", "A6", "Q3", "Q5", "Q7", "e-tron"],
+  "Mercedes-Benz": ["A", "C", "E", "GLA", "GLC", "GLE", "Vito"],
+  Toyota: ["Yaris", "Corolla", "C-HR", "RAV4", "Camry", "Proace"],
+  Ford: ["Fiesta", "Focus", "Mondeo", "Kuga", "Puma", "Transit"],
+  Hyundai: ["i20", "i30", "Kona", "Tucson", "Santa Fe", "IONIQ 5"],
+  Kia: ["Ceed", "Sportage", "Sorento", "Niro", "EV6", "Stonic"],
+  Peugeot: ["208", "308", "508", "2008", "3008", "5008"],
+  Renault: ["Clio", "Megane", "Captur", "Kadjar", "Kangoo", "Trafic"],
+  Volvo: ["V60", "V90", "XC40", "XC60", "XC90", "EX30"],
+};
+
 const fuels = ["Vse", "Benzin", "Nafta", "Hybrid", "Elektro", "LPG"];
 const transmissions = ["Vse", "Manual", "Automat"];
 const bodies = ["Hatchback", "Kombi", "Sedan", "SUV", "Coupe", "MPV", "Dodavka"];
@@ -520,6 +535,16 @@ function initSelects() {
   fillSelect(byId("bodyInput"), bodies);
   fillSelect(byId("regionFilter"), regions, true);
   fillSelect(byId("regionInput"), regions.slice(1));
+  updateModelSuggestions("brandFilter", "modelSuggestions");
+  updateModelSuggestions("brandInput", "sellerModelSuggestions");
+}
+
+function updateModelSuggestions(brandSelectId, datalistId) {
+  const brand = byId(brandSelectId).value;
+  const models = brandModels[brand] || Object.values(brandModels).flat();
+  byId(datalistId).innerHTML = models
+    .map((model) => `<option value="${model}"></option>`)
+    .join("");
 }
 
 function getFilteredListings() {
@@ -752,6 +777,7 @@ function renderCard(car) {
   const isSaved = state.saved.includes(car.id);
   const isCompared = state.compare.includes(car.id);
   const image = car.photos[0] || stockPhotos[0];
+  const trust = trustLevel(car);
   return `
     <article class="car-card">
       <div class="car-image">
@@ -775,6 +801,7 @@ function renderCard(car) {
           <span class="tag">${listingCode(car)}</span>
           ${car.status === "sold" ? '<span class="tag sold">Prodano</span>' : ""}
           ${car.promoted ? '<span class="tag top">TOP</span>' : ""}
+          <span class="tag trust">${trust}</span>
           <span class="tag">${car.body}</span>
           <span class="tag">${car.region}</span>
           ${car.vat ? '<span class="tag">Odpocet DPH</span>' : ""}
@@ -835,6 +862,19 @@ function listingStats(car) {
     saves: state.saved.includes(car.id) ? 1 + (seed % 18) : seed % 18,
     calls: 2 + (seed % 36),
   };
+}
+
+function trustLevel(car) {
+  let score = 0;
+  if (car.verifiedPhone !== false) score += 1;
+  if (car.verifiedEmail !== false) score += 1;
+  if (car.vin) score += 1;
+  if (car.inspection) score += 1;
+  if (car.serviceBook) score += 1;
+  if (!car.crashed) score += 1;
+  if (score >= 5) return "Vysoka duvera";
+  if (score >= 3) return "Overovano";
+  return "Zakladni kontrola";
 }
 
 function toggleSave(id) {
@@ -903,9 +943,14 @@ function showDetail(id) {
         </div>
         <p>${car.description}</p>
         <div class="tag-row">
+          <span class="tag trust">${trustLevel(car)}</span>
+          ${car.verifiedPhone !== false ? '<span class="tag">Overeny telefon</span>' : ""}
+          ${car.verifiedEmail !== false ? '<span class="tag">Overeny e-mail</span>' : ""}
+          ${car.serviceBook ? '<span class="tag">Servisni historie</span>' : ""}
           ${car.vat ? '<span class="tag">Mozny odpocet DPH</span>' : ""}
           ${car.crashed ? '<span class="tag">Bourane / opravovane</span>' : '<span class="tag">Nebourane</span>'}
         </div>
+        <button class="text-button report-button" data-report="${car.id}" type="button">Nahlasit podezrely inzerat</button>
         <a class="primary-button" href="tel:${phoneHref(car.phone)}">Volat ${car.phone}</a>
         <a class="ghost-button" href="mailto:${car.email}">${car.email}</a>
         <div class="detail-actions">
@@ -1030,10 +1075,15 @@ function handleListingSubmit(event) {
     crashed: byId("crashedInput").checked,
     phone: byId("phoneInput").value.trim(),
     email: byId("emailInput").value.trim(),
+    sellerName: byId("sellerNameInput").value.trim(),
+    sellerType: byId("sellerTypeInput").value,
     description: byId("descriptionInput").value.trim(),
     photos: state.selectedPhotos.length ? state.selectedPhotos : [stockPhotos[5]],
     ownerEmail: state.user.email,
     ownerPhone: state.user.phone,
+    verifiedPhone: byId("verifiedPhoneInput").checked,
+    verifiedEmail: byId("verifiedEmailInput").checked,
+    serviceBook: byId("serviceBookInput").checked,
     status: "active",
     promoted: false,
     views: 0,
@@ -1214,13 +1264,23 @@ function bindEvents() {
     event.preventDefault();
     collectFilters();
     renderListings();
+    document.body.classList.remove("filters-open");
   });
-  byId("resetFilters").addEventListener("click", resetFilters);
+  byId("resetFilters").addEventListener("click", () => {
+    resetFilters();
+    document.body.classList.remove("filters-open");
+  });
   byId("sortSelect").addEventListener("change", renderListings);
+  byId("brandFilter").addEventListener("change", () => updateModelSuggestions("brandFilter", "modelSuggestions"));
+  byId("brandInput").addEventListener("change", () => updateModelSuggestions("brandInput", "sellerModelSuggestions"));
+  byId("mobileFilterButton").addEventListener("click", () => {
+    document.body.classList.toggle("filters-open");
+  });
   byId("quickSearchForm").addEventListener("submit", (event) => {
     event.preventDefault();
     byId("brandFilter").value = byId("quickBrand").value;
     byId("priceMaxFilter").value = byId("quickPrice").value;
+    updateModelSuggestions("brandFilter", "modelSuggestions");
     collectFilters();
     renderListings();
     location.hash = "#nabidka";
@@ -1251,6 +1311,7 @@ function bindEvents() {
     const discountButton = event.target.closest("[data-discount]");
     const photoManageButton = event.target.closest("[data-photo-manage]");
     const deleteButton = event.target.closest("[data-delete-listing]");
+    const reportButton = event.target.closest("[data-report]");
     if (saveButton) toggleSave(saveButton.dataset.save);
     if (detailButton) showDetail(detailButton.dataset.detail);
     if (compareButton) toggleCompare(compareButton.dataset.compare);
@@ -1265,6 +1326,7 @@ function bindEvents() {
     if (discountButton) discountListing(discountButton.dataset.discount);
     if (photoManageButton) toast("Sprava fotek bude v realne verzi menit poradi a mazat snimky.");
     if (deleteButton) deleteListing(deleteButton.dataset.deleteListing);
+    if (reportButton) toast("Dekuji, v realne verzi pujde inzerat ke kontrole podpory.");
   });
 
   document.addEventListener("submit", (event) => {

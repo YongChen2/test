@@ -17,6 +17,7 @@
         <a href="#nabidka">Nabidka</a>
         <a href="#prodej">Prodat auto</a>
         <a href="#ucet">Muj ucet</a>
+        <a href="#bezpecnost">Bezpecnost</a>
       </nav>
       <button class="ghost-button" id="accountButton" type="button">Prihlasit</button>
     </header>
@@ -76,7 +77,8 @@
             </label>
             <label>
               Model
-              <input id="modelFilter" type="search" placeholder="Octavia, Golf..." />
+              <input id="modelFilter" type="search" list="modelSuggestions" placeholder="Octavia, Golf..." />
+              <datalist id="modelSuggestions"></datalist>
             </label>
             <div class="input-grid">
               <label>
@@ -142,6 +144,7 @@
               </select>
             </label>
           </div>
+          <button class="ghost-button mobile-filter-button" id="mobileFilterButton" type="button">Otevrit filtry</button>
           <div class="listing-grid" id="listingGrid"></div>
           <div class="empty-state" id="emptyState" hidden>
             <h3>Zadne auto neodpovida filtru</h3>
@@ -158,8 +161,16 @@
             Vyplnte zakladni parametry, kontakt a nahrajte fotky. Inzerat se v demo verzi ulozi
             do tohoto prohlizece a hned se objevi v nabidce.
           </p>
+          <div class="seller-steps" aria-label="Kroky pridani inzeratu">
+            <span>1 Vozidlo</span>
+            <span>2 Parametry</span>
+            <span>3 Kontakt</span>
+            <span>4 Fotky</span>
+          </div>
         </div>
         <form class="seller-form" id="listingForm">
+          <div class="form-block">
+            <h3>Vozidlo</h3>
           <div class="form-row">
             <label>
               Znacka
@@ -167,9 +178,13 @@
             </label>
             <label>
               Model
-              <input id="modelInput" type="text" required placeholder="Octavia" />
+              <input id="modelInput" type="text" list="sellerModelSuggestions" required placeholder="Octavia" />
+              <datalist id="sellerModelSuggestions"></datalist>
             </label>
           </div>
+          </div>
+          <div class="form-block">
+            <h3>Parametry a cena</h3>
           <div class="form-row">
             <label>
               Rok vyroby
@@ -244,18 +259,73 @@
             <label><input id="vatInput" type="checkbox" /> Mozny odpocet DPH</label>
             <label><input id="crashedInput" type="checkbox" /> Bourane / opravovane</label>
           </div>
+          </div>
+          <div class="form-block">
+            <h3>Kontakt a popis</h3>
+          <div class="form-row">
+            <label>
+              Jmeno prodejce
+              <input id="sellerNameInput" type="text" placeholder="Jan Novak / Auto Praha" />
+            </label>
+            <label>
+              Typ prodejce
+              <select id="sellerTypeInput">
+                <option value="Soukromy prodejce">Soukromy prodejce</option>
+                <option value="Autobazar">Autobazar</option>
+                <option value="Dealer">Dealer</option>
+              </select>
+            </label>
+          </div>
+          <div class="switch-row">
+            <label><input id="verifiedPhoneInput" type="checkbox" checked /> Overeny telefon</label>
+            <label><input id="verifiedEmailInput" type="checkbox" checked /> Overeny e-mail</label>
+            <label><input id="serviceBookInput" type="checkbox" /> Servisni historie</label>
+          </div>
           <label>
             Popis
             <textarea id="descriptionInput" rows="5" required placeholder="Stav vozu, servis, vybava..."></textarea>
           </label>
+          </div>
+          <div class="form-block">
+            <h3>Fotky</h3>
           <label class="upload-box">
             <span>Nahrat fotky auta</span>
             <small>Maximalne 15 fotek. Prvni fotka bude hlavni.</small>
             <input id="photosInput" type="file" accept="image/*" multiple />
           </label>
           <div class="photo-preview" id="photoPreview" aria-live="polite"></div>
+          </div>
           <button class="primary-button wide" type="submit">Zverejnit inzerat</button>
         </form>
+      </section>
+
+      <section class="trust-section" id="bezpecnost">
+        <div>
+          <p class="eyebrow">Duveryhodnost</p>
+          <h2>Bezpecnejsi AutoMarket</h2>
+          <p>
+            Zatim je to demo, ale web uz pocita s overenim telefonu, e-mailu, VIN, servisni historii,
+            nahlasenim podezreleho inzeratu a prehlednym hodnocenim duvery.
+          </p>
+        </div>
+        <div class="trust-grid">
+          <article>
+            <strong>Overeny kontakt</strong>
+            <span>Telefon a e-mail u prodejce budou jasne oznacene.</span>
+          </article>
+          <article>
+            <strong>Kontrola inzeratu</strong>
+            <span>VIN, STK, bourane/nebourane a servisni historie na jednom miste.</span>
+          </article>
+          <article>
+            <strong>Nahlaseni</strong>
+            <span>Kupujici muze oznacit podezrely inzerat pro kontrolu.</span>
+          </article>
+          <article>
+            <strong>Historie ceny</strong>
+            <span>Pozdeji ukazeme zlevneni a predchozi cenu auta.</span>
+          </article>
+        </div>
       </section>
 
       <section class="account-section" id="ucet">
