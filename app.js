@@ -69,11 +69,11 @@ const demoListings = [
     power: 110,
     color: "Seda metaliza",
     inspection: "2027-03",
-    vin: "TMBJG7NE9M0123456",
+    vin: "TMBJG7NE9M0K8R4P2",
     owners: 1,
     vat: true,
     crashed: false,
-    phone: "+420 777 123 456",
+    phone: "+420 608 742 519",
     email: "prodej@automarket.cz",
     description:
       "Servisni historie, adaptivni tempomat, LED svetla, vyhrivane sedačky a sada zimnich kol.",
@@ -94,11 +94,11 @@ const demoListings = [
     power: 140,
     color: "Cerna",
     inspection: "2026-11",
-    vin: "WBA5V71020B123456",
+    vin: "WBA5V71020B7N4L8X",
     owners: 2,
     vat: false,
     crashed: false,
-    phone: "+420 606 555 111",
+    phone: "+420 725 318 604",
     email: "bmw@automarket.cz",
     description:
       "Pohon 4x4, sportovni sedadla, navigace, automaticka klimatizace a pravidelny servis.",
@@ -119,11 +119,11 @@ const demoListings = [
     power: 90,
     color: "Bila",
     inspection: "2027-08",
-    vin: "SB1K93BE10E123456",
+    vin: "SB1K93BE10E6T2H7M",
     owners: 1,
     vat: true,
     crashed: false,
-    phone: "+420 725 900 300",
+    phone: "+420 739 582 416",
     email: "toyota@automarket.cz",
     description:
       "Usporny hybrid, kamera, CarPlay, asistent jizdnich pruhu a velmi pekny interier.",
@@ -148,7 +148,7 @@ const demoListings = [
     owners: 2,
     vat: false,
     crashed: false,
-    phone: "+420 731 222 333",
+    phone: "+420 731 864 205",
     email: "golf@automarket.cz",
     description: "Pekny stav, nizka spotreba, parkovaci senzory, digitalni radio a letni kola.",
     photos: [stockPhotos[3], stockPhotos[0]],
@@ -168,11 +168,11 @@ const demoListings = [
     power: 150,
     color: "Stribrna",
     inspection: "2027-01",
-    vin: "WAUZZZF49MA123456",
+    vin: "WAUZZZF49MA8C5R7L",
     owners: 1,
     vat: true,
     crashed: false,
-    phone: "+420 608 410 220",
+    phone: "+420 604 927 381",
     email: "audi@automarket.cz",
     description:
       "Quattro, Matrix LED, virtual cockpit, tazne zarizeni, servis pouze Audi a dva klice.",
@@ -193,11 +193,11 @@ const demoListings = [
     power: 225,
     color: "Cerna metaliza",
     inspection: "2027-05",
-    vin: "W1N2539111F123456",
+    vin: "W1N2539A71F9K6D3S",
     owners: 1,
     vat: true,
     crashed: false,
-    phone: "+420 777 880 900",
+    phone: "+420 777 429 685",
     email: "mercedes@automarket.cz",
     description:
       "Plug-in hybrid, vzduchovy podvozek, panoramaticka strecha, Burmester a kompletni servisni historie.",
@@ -218,11 +218,11 @@ const demoListings = [
     power: 92,
     color: "Cervena",
     inspection: "2026-10",
-    vin: "WF0NXXGCHNJA12345",
+    vin: "WF0NXXGCHNJA7M2P9",
     owners: 2,
     vat: false,
     crashed: false,
-    phone: "+420 602 147 258",
+    phone: "+420 602 748 913",
     email: "ford@automarket.cz",
     description:
       "Udrzovany Focus po vymene rozvodu, vyhrivane celni sklo, tempomat a nove brzdy.",
@@ -243,11 +243,11 @@ const demoListings = [
     power: 132,
     color: "Seda",
     inspection: "2027-12",
-    vin: "TMAJ381AANJ123456",
+    vin: "TMAJ381AANJ4V8C2R",
     owners: 1,
     vat: true,
     crashed: false,
-    phone: "+420 720 333 444",
+    phone: "+420 720 936 574",
     email: "hyundai@automarket.cz",
     description:
       "V zaruce, pohon 4x4, automat, adaptivni tempomat, kamera, LED a pravidelny servis.",
@@ -268,11 +268,11 @@ const demoListings = [
     power: 118,
     color: "Bila",
     inspection: "2027-04",
-    vin: "U5YH881AAML123456",
+    vin: "U5YH881AAML6B3K8D",
     owners: 1,
     vat: false,
     crashed: false,
-    phone: "+420 734 555 222",
+    phone: "+420 734 681 295",
     email: "kia@automarket.cz",
     description:
       "Cesky puvod, jeste v tovarni zaruce, CarPlay, asistent jizdnich pruhu a zimni sada.",
@@ -293,11 +293,11 @@ const demoListings = [
     power: 133,
     color: "Modra metaliza",
     inspection: "2026-12",
-    vin: "VF3M45GFRLS123456",
+    vin: "VF3M45GFRLS9W2R6K",
     owners: 2,
     vat: false,
     crashed: false,
-    phone: "+420 739 808 101",
+    phone: "+420 739 452 807",
     email: "peugeot@automarket.cz",
     description:
       "Vyssi vybava GT, masazni sedadla, kamera 360, bezklicove startovani a velmi dobry stav.",
@@ -318,11 +318,11 @@ const demoListings = [
     power: 81,
     color: "Seda",
     inspection: "2026-07",
-    vin: "VF1RFB00358123456",
+    vin: "VF1RFB00358D7K4S2",
     owners: 3,
     vat: false,
     crashed: true,
-    phone: "+420 605 121 212",
+    phone: "+420 605 918 342",
     email: "renault@automarket.cz",
     description:
       "Prakticke kombi, nizka spotreba, po kosmeticke oprave praveho blatniku, technicky v poradku.",
@@ -343,11 +343,11 @@ const demoListings = [
     power: 145,
     color: "Tmave modra",
     inspection: "2027-02",
-    vin: "YV1UZK5V2M1123456",
+    vin: "YV1UZK5V2M1P8L3D7",
     owners: 1,
     vat: true,
     crashed: false,
-    phone: "+420 777 640 320",
+    phone: "+420 777 284 631",
     email: "volvo@automarket.cz",
     description:
       "Bezpecnostni asistenti, AWD, kozeny interier, nezavisle topeni a servis Volvo.",
@@ -368,11 +368,11 @@ const demoListings = [
     power: 200,
     color: "Cerna",
     inspection: "2026-08",
-    vin: "TMBJE9NP7L0123456",
+    vin: "TMBJE9NP7L0R6V8H4",
     owners: 1,
     vat: true,
     crashed: false,
-    phone: "+420 721 444 909",
+    phone: "+420 721 936 408",
     email: "superb@automarket.cz",
     description:
       "Top vybava L&K, DCC, Canton, ventilovana sedadla, nezavisle topeni a pekny lak.",
@@ -393,11 +393,11 @@ const demoListings = [
     power: 110,
     color: "Bila",
     inspection: "2026-06",
-    vin: "WV1ZZZ7HZKH123456",
+    vin: "WV1ZZZ7HZKH5C9M2P",
     owners: 2,
     vat: true,
     crashed: false,
-    phone: "+420 604 777 404",
+    phone: "+420 604 358 719",
     email: "transporter@automarket.cz",
     description:
       "Dlouha verze, tazne zarizeni, servisni kniha, nove pneumatiky a pripraveno k praci.",
@@ -418,11 +418,11 @@ const demoListings = [
     power: 125,
     color: "Bila / cerna",
     inspection: "2027-09",
-    vin: "WBY8P210XK7123456",
+    vin: "WBY8P210XK7E4T9N6",
     owners: 1,
     vat: false,
     crashed: false,
-    phone: "+420 777 111 909",
+    phone: "+420 777 615 230",
     email: "bmwi3@automarket.cz",
     description:
       "Elektricke mestske auto, dobra kapacita baterie, rychlonabijeni, tepelne cerpadlo a servis BMW.",
@@ -443,11 +443,11 @@ const demoListings = [
     power: 210,
     color: "Seda metaliza",
     inspection: "2026-11",
-    vin: "WAUZZZ4M1KD123456",
+    vin: "WAUZZZ4M1KD8H6P3X",
     owners: 2,
     vat: true,
     crashed: false,
-    phone: "+420 735 202 202",
+    phone: "+420 735 849 126",
     email: "q7@automarket.cz",
     description:
       "Sedmimistne SUV, vzduchovy podvozek, Matrix LED, tazne zarizeni a pravidelny servis.",
@@ -595,6 +595,7 @@ function renderCard(car) {
           <span>${car.transmission}</span>
         </div>
         <div class="tag-row">
+          <span class="tag">${listingCode(car)}</span>
           <span class="tag">${car.body}</span>
           <span class="tag">${car.region}</span>
           ${car.vat ? '<span class="tag">Odpocet DPH</span>' : ""}
@@ -670,6 +671,7 @@ function showDetail(id) {
         <h2>${car.brand} ${car.model}</h2>
         <span class="price">${currency.format(car.price)}</span>
         <div class="spec-grid">
+          ${spec("Cislo inzeratu", listingCode(car))}
           ${spec("Rok", car.year)}
           ${spec("Najeto", `${number.format(car.mileage)} km`)}
           ${spec("Palivo", car.fuel)}
@@ -696,6 +698,18 @@ function showDetail(id) {
 
 function spec(label, value) {
   return `<div><span>${label}</span><strong>${value}</strong></div>`;
+}
+
+function listingCode(car) {
+  const demoNumber = String(car.id).match(/^demo-(\d+)$/)?.[1];
+  if (demoNumber) return `AM-${String(4200 + Number(demoNumber)).padStart(5, "0")}`;
+  return `AM-${String(Math.abs(hashCode(car.id))).slice(0, 5).padStart(5, "0")}`;
+}
+
+function hashCode(value) {
+  return String(value)
+    .split("")
+    .reduce((hash, char) => (hash << 5) - hash + char.charCodeAt(0), 0);
 }
 
 function phoneHref(phone) {
