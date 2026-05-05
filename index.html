@@ -15,9 +15,11 @@
       </a>
       <nav class="nav" aria-label="Hlavni navigace">
         <a href="./nabidka.html">Nabidka</a>
+        <a href="./znacky.html">Znacky</a>
         <a href="./prodej.html">Prodat auto</a>
+        <a href="./autobazary.html">Pro autobazary</a>
+        <a href="./cenik.html">Cenik</a>
         <a href="./ucet.html">Muj ucet</a>
-        <a href="./bezpecnost.html">Bezpecnost</a>
       </nav>
       <button class="ghost-button" id="accountButton" type="button">Prihlasit</button>
     </header>
@@ -28,9 +30,14 @@
           <p class="eyebrow">Ceska inzerce aut</p>
           <h1>AutoMarket</h1>
           <p>
-            Vice strankovy auto bazar pro hledani, prodej a spravu inzeratu.
-            Demo data zustavaji jako ukazka, dokud nepripojime databazi pozdeji.
+            Hledejte auta podle detailnich filtru, porovnavejte nabidky a pridejte vlastni
+            inzerat behem par minut. Ukazkove vozy zatim drzi web plny, nez prijdou realni prodejci.
           </p>
+          <div class="hero-metrics" aria-label="Prehled AutoMarketu">
+            <span><strong id="heroListingCount">0</strong> inzeratu</span>
+            <span><strong id="heroBrandCount">0</strong> znacek</span>
+            <span><strong id="heroDealerCount">0</strong> prodejcu</span>
+          </div>
           <div class="hero-actions">
             <a class="primary-button" href="./nabidka.html">Prochazet auta</a>
             <a class="secondary-button" href="./prodej.html">Pridat inzerat</a>
@@ -52,7 +59,7 @@
       <section class="stats-band" aria-label="Prehled">
         <div>
           <strong id="totalListings">0</strong>
-          <span>aktivnich ukazek</span>
+          <span>aktivnich inzeratu</span>
         </div>
         <div>
           <strong>15</strong>
@@ -62,6 +69,25 @@
           <strong>CR</strong>
           <span>kraje a mesta</span>
         </div>
+      </section>
+
+      <section class="home-showcase">
+        <div class="section-heading">
+          <p class="eyebrow">Aktualni vyber</p>
+          <h2>Nabidka inzeratu</h2>
+        </div>
+        <div class="listing-grid" id="homeFeaturedGrid"></div>
+        <div class="center-action">
+          <a class="primary-button" href="./nabidka.html">Zobrazit celou nabidku</a>
+        </div>
+      </section>
+
+      <section class="brand-section">
+        <div class="section-heading">
+          <p class="eyebrow">Rychly vyber</p>
+          <h2>Nejhledanejsi znacky</h2>
+        </div>
+        <div class="brand-grid" id="homeBrandGrid"></div>
       </section>
 
       <section class="feature-links">
@@ -78,10 +104,16 @@
           <a class="ghost-button" href="./prodej.html">Prodat auto</a>
         </article>
         <article>
-          <p class="eyebrow">Ucet</p>
-          <h2>Muj AutoMarket</h2>
-          <p>Ulozene vozy, porovnani, hlidani, zpravy, poznamky a moje inzeraty.</p>
-          <a class="ghost-button" href="./ucet.html">Otevrit ucet</a>
+          <p class="eyebrow">Prodejci</p>
+          <h2>Pro autobazary</h2>
+          <p>Balicky pro autobazary, topovani, overeny prodejce a budouci import inzeratu.</p>
+          <a class="ghost-button" href="./autobazary.html">Otevrit stranku</a>
+        </article>
+        <article>
+          <p class="eyebrow">Vyber</p>
+          <h2>Porovnani aut</h2>
+          <p>Samostatna stranka pro auta, ktera si uzivatel prida do porovnani.</p>
+          <a class="ghost-button" href="./porovnani.html">Porovnat auta</a>
         </article>
       </section>
     </main>
@@ -102,6 +134,12 @@
         </label>
         <button class="primary-button wide" type="submit">Pokracovat</button>
       </form>
+    </dialog>
+    <dialog class="modal" id="detailModal">
+      <article class="detail-card">
+        <button class="close-button" id="closeDetail" type="button" aria-label="Zavrit">x</button>
+        <div id="detailContent"></div>
+      </article>
     </dialog>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>

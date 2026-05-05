@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bezpecnost | AutoMarket</title>
+    <title>Znacky aut | AutoMarket</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -19,33 +19,16 @@
       </nav>
       <button class="ghost-button" id="accountButton" type="button">Prihlasit</button>
     </header>
-
     <main>
       <section class="page-hero">
-        <p class="eyebrow">Duveryhodnost</p>
-        <h1>Bezpecnejsi AutoMarket</h1>
-        <p>Stranka pro pravidla, overeni prodejcu, nahlaseni podezrelych inzeratu a budouci kontrolu VIN.</p>
+        <p class="eyebrow">Katalog podle znacky</p>
+        <h1>Znacky aut</h1>
+        <p>Rychly prehled znacek a modelu, ktere jsou v ukazkove nabidce AutoMarketu.</p>
       </section>
-      <section class="trust-section">
-        <div>
-          <p class="eyebrow">Ochrana kupujicich</p>
-          <h2>Co bude web hlidat</h2>
-          <p>Zatim je to demo bez databaze, ale struktura pocita s overenim kontaktu, stavem vozu a kontrolou podezrelych inzeratu.</p>
-        </div>
-        <div class="trust-grid">
-          <article><strong>Overeny kontakt</strong><span>Telefon a e-mail u prodejce budou jasne oznacene.</span></article>
-          <article><strong>Kontrola inzeratu</strong><span>VIN, STK, bourane/nebourane a servisni historie na jednom miste.</span></article>
-          <article><strong>Nahlaseni</strong><span>Kupujici muze oznacit podezrely inzerat pro kontrolu.</span></article>
-          <article><strong>Historie ceny</strong><span>Pozdeji ukazeme zlevneni a predchozi cenu auta.</span></article>
-        </div>
-      </section>
-      <section class="feature-links">
-        <article><h2>Pro kupujici</h2><p>Neposilat zalohy predem, overit VIN, chtit kupni smlouvu a kontrolovat prodejce.</p></article>
-        <article><h2>Pro prodejce</h2><p>Vyplnit pravdive informace, nahrat realne fotky a uvadet stav vozu bez schovavani vad.</p></article>
-        <article><h2>Podpora</h2><p>V realne verzi sem prijde kontakt, formular pro nahlaseni a pravidla inzerce.</p></article>
+      <section class="directory-section">
+        <div class="directory-grid" id="brandDirectory"></div>
       </section>
     </main>
-
     <dialog class="modal" id="accountModal">
       <form method="dialog" class="modal-card" id="accountForm">
         <button class="close-button" id="closeAccount" type="button" aria-label="Zavrit">x</button>

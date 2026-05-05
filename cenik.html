@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cenik propagace | AutoMarket</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./index.html"><span class="brand-mark">AM</span><span>AutoMarket</span></a>
+      <nav class="nav" aria-label="Hlavni navigace">
+        <a href="./nabidka.html">Nabidka</a>
+        <a href="./znacky.html">Znacky</a>
+        <a href="./prodej.html">Prodat auto</a>
+        <a href="./autobazary.html">Pro autobazary</a>
+        <a href="./cenik.html">Cenik</a>
+        <a href="./ucet.html">Muj ucet</a>
+      </nav>
+      <button class="ghost-button" id="accountButton" type="button">Prihlasit</button>
+    </header>
+    <main>
+      <section class="page-hero">
+        <p class="eyebrow">Propagace</p>
+        <h1>Cenik AutoMarket</h1>
+        <p>Ukazkove ceny pro zvyrazneni inzeratu a firemni prodejce.</p>
+      </section>
+      <section class="account-section">
+        <div class="promo-grid">
+          <article class="promo-card"><h3>Zvyrazneni</h3><p>Stitek TOP a lepsi viditelnost.</p><strong>149 Kc / 7 dni</strong></article>
+          <article class="promo-card"><h3>TOP pozice</h3><p>Prednostni zobrazeni v katalogu.</p><strong>299 Kc / 7 dni</strong></article>
+          <article class="promo-card"><h3>Overeny prodejce</h3><p>Duveryhodnejsi profil pro kupujici.</p><strong>990 Kc / mesic</strong></article>
+          <article class="promo-card"><h3>Autobazar</h3><p>Balicek pro vice inzeratu a statistiky.</p><strong>2 490 Kc / mesic</strong></article>
+        </div>
+      </section>
+    </main>
+    <dialog class="modal" id="accountModal">
+      <form method="dialog" class="modal-card" id="accountForm">
+        <button class="close-button" id="closeAccount" type="button" aria-label="Zavrit">x</button>
+        <p class="eyebrow">Demo ucet</p><h2>Prihlaseni</h2><p>Zadejte telefon a e-mail. Pro demo neni potreba heslo.</p>
+        <label>Telefon <input id="loginPhone" type="tel" required placeholder="+420 777 123 456" /></label>
+        <label>E-mail <input id="loginEmail" type="email" required placeholder="vas@email.cz" /></label>
+        <button class="primary-button wide" type="submit">Pokracovat</button>
+      </form>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>

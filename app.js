@@ -716,6 +716,38 @@ function applyUrlFilters() {
   collectFilters();
 }
 
+function renderHome() {
+  if (byId("heroListingCount")) byId("heroListingCount").textContent = state.listings.length;
+  if (byId("heroBrandCount")) byId("heroBrandCount").textContent = uniqueBrands().length;
+  if (byId("heroDealerCount")) {
+    byId("heroDealerCount").textContent = new Set(state.listings.map((car) => car.sellerType)).size;
+  }
+  if (byId("homeFeaturedGrid")) {
+    byId("homeFeaturedGrid").innerHTML = [...state.listings]
+      .sort((a, b) => b.price - a.price)
+      .slice(0, 6)
+      .map(renderCard)
+      .join("");
+  }
+  if (byId("homeBrandGrid")) {
+    byId("homeBrandGrid").innerHTML = uniqueBrands()
+      .map((brand) => {
+        const count = state.listings.filter((car) => car.brand === brand).length;
+        return `
+          <a class="brand-card" href="./nabidka.html?brand=${encodeURIComponent(brand)}">
+            <span>${brand}</span>
+            <strong>${count} inzeratu</strong>
+          </a>
+        `;
+      })
+      .join("");
+  }
+}
+
+function uniqueBrands() {
+  return [...new Set(state.listings.map((car) => car.brand))].sort();
+}
+
 function renderSaved() {
   if (!byId("savedGrid")) return;
   const savedListings = state.listings.filter((listing) => state.saved.includes(listing.id));
@@ -792,6 +824,23 @@ function renderCompare() {
     )
     .join("");
   byId("compareEmpty").hidden = cars.length > 0;
+}
+
+function renderBrandDirectory() {
+  if (!byId("brandDirectory")) return;
+  byId("brandDirectory").innerHTML = uniqueBrands()
+    .map((brand) => {
+      const cars = state.listings.filter((car) => car.brand === brand);
+      const models = [...new Set(cars.map((car) => car.model.split(" ")[0]))].slice(0, 5);
+      return `
+        <article class="directory-card">
+          <h2>${brand}</h2>
+          <p>${cars.length} inzeratu · ${models.join(", ")}</p>
+          <a class="primary-button" href="./nabidka.html?brand=${encodeURIComponent(brand)}">Zobrazit vozy</a>
+        </article>
+      `;
+    })
+    .join("");
 }
 
 function renderAlerts() {
@@ -919,6 +968,7 @@ function renderCard(car) {
           <h3>${car.brand} ${car.model}</h3>
           <span class="price">${currency.format(car.price)}</span>
         </div>
+        <p class="card-subline">${car.salePlace} · ${car.condition} · ${car.photos.length} fotek · vlozeno ${formatDate(car.createdAt)}</p>
         <div class="meta-list">
           <span>${car.year}</span>
           <span>${number.format(car.mileage)} km</span>
@@ -935,9 +985,11 @@ function renderCard(car) {
           <span class="tag">${car.body}</span>
           <span class="tag">${car.region}</span>
           <span class="tag">${car.sellerType}</span>
+          ${car.verifiedPhone !== false ? '<span class="tag trust">Overeny kontakt</span>' : ""}
           ${car.vat ? '<span class="tag">Odpocet DPH</span>' : ""}
           ${!car.crashed ? '<span class="tag">Nebourane</span>' : ""}
         </div>
+        <p class="equipment-line">${car.equipment.slice(0, 3).join(" · ")}</p>
         <div class="card-actions">
           <button class="ghost-button" data-detail="${car.id}" type="button">Detail</button>
           <button class="ghost-button ${isCompared ? "active-outline" : ""}" data-compare="${car.id}" type="button">
@@ -1085,6 +1137,19 @@ function showDetail(id) {
     .slice(1, 6)
     .map((photo) => `<img src="${photo}" alt="${car.brand} ${car.model}" />`)
     .join("");
+  const similar = state.listings
+    .filter((listing) => listing.id !== car.id && (listing.brand === car.brand || listing.body === car.body))
+    .slice(0, 3)
+    .map(
+      (listing) => `
+        <button class="similar-card" data-detail="${listing.id}" type="button">
+          <img src="${listing.photos[0] || stockPhotos[0]}" alt="${listing.brand} ${listing.model}" />
+          <span>${listing.brand} ${listing.model}</span>
+          <strong>${currency.format(listing.price)}</strong>
+        </button>
+      `,
+    )
+    .join("");
 
   byId("detailContent").innerHTML = `
     <div class="detail-hero">
@@ -1140,6 +1205,10 @@ function showDetail(id) {
           </label>
           <button class="primary-button" type="submit">Ulozit poznamku</button>
         </form>
+        <div class="similar-block">
+          <h3>Podobne vozy</h3>
+          <div class="similar-grid">${similar}</div>
+        </div>
       </div>
     </div>
   `;
@@ -1155,6 +1224,12 @@ function addToHistory(id) {
 
 function spec(label, value) {
   return `<div><span>${label}</span><strong>${value}</strong></div>`;
+}
+
+function formatDate(value) {
+  return new Intl.DateTimeFormat("cs-CZ", { day: "numeric", month: "numeric", year: "numeric" }).format(
+    new Date(value),
+  );
 }
 
 function listingCode(car) {
@@ -1523,6 +1598,8 @@ function boot() {
   bindEvents();
   updateAccountButton();
   if (byId("totalListings")) byId("totalListings").textContent = state.listings.length;
+  renderHome();
+  renderBrandDirectory();
   renderListings();
   renderAccount();
   switchTab(state.activeTab);

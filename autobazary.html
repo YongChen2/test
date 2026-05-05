@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bezpecnost | AutoMarket</title>
+    <title>Pro autobazary | AutoMarket</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -19,39 +19,31 @@
       </nav>
       <button class="ghost-button" id="accountButton" type="button">Prihlasit</button>
     </header>
-
     <main>
       <section class="page-hero">
-        <p class="eyebrow">Duveryhodnost</p>
-        <h1>Bezpecnejsi AutoMarket</h1>
-        <p>Stranka pro pravidla, overeni prodejcu, nahlaseni podezrelych inzeratu a budouci kontrolu VIN.</p>
-      </section>
-      <section class="trust-section">
-        <div>
-          <p class="eyebrow">Ochrana kupujicich</p>
-          <h2>Co bude web hlidat</h2>
-          <p>Zatim je to demo bez databaze, ale struktura pocita s overenim kontaktu, stavem vozu a kontrolou podezrelych inzeratu.</p>
-        </div>
-        <div class="trust-grid">
-          <article><strong>Overeny kontakt</strong><span>Telefon a e-mail u prodejce budou jasne oznacene.</span></article>
-          <article><strong>Kontrola inzeratu</strong><span>VIN, STK, bourane/nebourane a servisni historie na jednom miste.</span></article>
-          <article><strong>Nahlaseni</strong><span>Kupujici muze oznacit podezrely inzerat pro kontrolu.</span></article>
-          <article><strong>Historie ceny</strong><span>Pozdeji ukazeme zlevneni a predchozi cenu auta.</span></article>
-        </div>
+        <p class="eyebrow">Firemni prodej</p>
+        <h1>Pro autobazary</h1>
+        <p>Stranka pro autobazary, dealery a prodejce, kteri budou chtit spravovat vice inzeratu.</p>
       </section>
       <section class="feature-links">
-        <article><h2>Pro kupujici</h2><p>Neposilat zalohy predem, overit VIN, chtit kupni smlouvu a kontrolovat prodejce.</p></article>
-        <article><h2>Pro prodejce</h2><p>Vyplnit pravdive informace, nahrat realne fotky a uvadet stav vozu bez schovavani vad.</p></article>
-        <article><h2>Podpora</h2><p>V realne verzi sem prijde kontakt, formular pro nahlaseni a pravidla inzerce.</p></article>
+        <article><h2>Hromadny import</h2><p>Pozdeji napojime import skladovych vozu z XML, CSV nebo API.</p></article>
+        <article><h2>Overeny autobazar</h2><p>Profil prodejce s overenym kontaktem, adresou a duveryhodnym oznacenim.</p></article>
+        <article><h2>Statistiky</h2><p>Zobrazeni, ulozeni, kliknuti na telefon a vykon topovanych inzeratu.</p></article>
+      </section>
+      <section class="trust-section">
+        <div><p class="eyebrow">Balicky</p><h2>Co dostane prodejce</h2><p>Spravu inzeratu, topovani, zvyrazneni, budouci fakturaci a lepsi pozice v katalogu.</p></div>
+        <div class="trust-grid">
+          <article><strong>Start</strong><span>Zakladni prezentace a rucni vkladani aut.</span></article>
+          <article><strong>AutoBazar</strong><span>Vice inzeratu, statistiky a zvyrazneni vybranych aut.</span></article>
+          <article><strong>Dealer</strong><span>Overeni, import a priorita v katalogu.</span></article>
+          <article><strong>Partner</strong><span>Budouci API, firemni profil a podpora.</span></article>
+        </div>
       </section>
     </main>
-
     <dialog class="modal" id="accountModal">
       <form method="dialog" class="modal-card" id="accountForm">
         <button class="close-button" id="closeAccount" type="button" aria-label="Zavrit">x</button>
-        <p class="eyebrow">Demo ucet</p>
-        <h2>Prihlaseni</h2>
-        <p>Zadejte telefon a e-mail. Pro demo neni potreba heslo.</p>
+        <p class="eyebrow">Demo ucet</p><h2>Prihlaseni</h2><p>Zadejte telefon a e-mail. Pro demo neni potreba heslo.</p>
         <label>Telefon <input id="loginPhone" type="tel" required placeholder="+420 777 123 456" /></label>
         <label>E-mail <input id="loginEmail" type="email" required placeholder="vas@email.cz" /></label>
         <button class="primary-button wide" type="submit">Pokracovat</button>
