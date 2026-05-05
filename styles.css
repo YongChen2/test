@@ -102,6 +102,22 @@ button {
       center / cover;
 }
 
+.page-hero {
+  padding: clamp(42px, 7vw, 86px) clamp(18px, 4vw, 58px);
+  color: white;
+  background:
+    linear-gradient(90deg, rgba(10, 18, 28, 0.86), rgba(10, 18, 28, 0.54)),
+    url("https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1800&q=85")
+      center / cover;
+}
+
+.page-hero p {
+  max-width: 720px;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
 .hero-copy {
   max-width: 720px;
 }
@@ -279,6 +295,29 @@ textarea:focus {
 .stats-band span {
   color: var(--muted);
   font-weight: 700;
+}
+
+.feature-links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  padding: clamp(36px, 6vw, 72px) clamp(18px, 4vw, 58px);
+  background: white;
+}
+
+.feature-links article {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 22px;
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.feature-links p {
+  color: var(--muted);
+  line-height: 1.6;
 }
 
 .market-layout {
@@ -922,6 +961,7 @@ textarea:focus {
 
 @media (max-width: 960px) {
   .hero,
+  .feature-links,
   .market-layout,
   .seller-section,
   .trust-section,
@@ -980,6 +1020,7 @@ textarea:focus {
   }
 
   .stats-band,
+  .feature-links,
   .account-summary,
   .trust-grid,
   .input-grid,

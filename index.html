@@ -9,31 +9,31 @@
   </head>
   <body>
     <header class="topbar">
-      <a class="brand" href="#home" aria-label="AutoMarket">
+      <a class="brand" href="./index.html" aria-label="AutoMarket">
         <span class="brand-mark">AM</span>
         <span>AutoMarket</span>
       </a>
       <nav class="nav" aria-label="Hlavni navigace">
-        <a href="#nabidka">Nabidka</a>
-        <a href="#prodej">Prodat auto</a>
-        <a href="#ucet">Muj ucet</a>
-        <a href="#bezpecnost">Bezpecnost</a>
+        <a href="./nabidka.html">Nabidka</a>
+        <a href="./prodej.html">Prodat auto</a>
+        <a href="./ucet.html">Muj ucet</a>
+        <a href="./bezpecnost.html">Bezpecnost</a>
       </nav>
       <button class="ghost-button" id="accountButton" type="button">Prihlasit</button>
     </header>
 
     <main>
-      <section class="hero" id="home">
+      <section class="hero">
         <div class="hero-copy">
           <p class="eyebrow">Ceska inzerce aut</p>
           <h1>AutoMarket</h1>
           <p>
-            Najdete auto podle znacky, ceny, roku, najezdu i lokality.
-            Prodejci muzou nahrat az 15 fotek a kompletni informace k vozu.
+            Vice strankovy auto bazar pro hledani, prodej a spravu inzeratu.
+            Demo data zustavaji jako ukazka, dokud nepripojime databazi pozdeji.
           </p>
           <div class="hero-actions">
-            <a class="primary-button" href="#nabidka">Prochazet auta</a>
-            <a class="secondary-button" href="#prodej">Pridat inzerat</a>
+            <a class="primary-button" href="./nabidka.html">Prochazet auta</a>
+            <a class="secondary-button" href="./prodej.html">Pridat inzerat</a>
           </div>
         </div>
         <form class="hero-search" id="quickSearchForm" aria-label="Rychle hledani">
@@ -45,14 +45,14 @@
             Cena do
             <input id="quickPrice" type="number" min="0" step="10000" placeholder="500000" />
           </label>
-          <button class="primary-button" type="submit">Hledat</button>
+          <button class="primary-button" type="submit">Hledat v nabidce</button>
         </form>
       </section>
 
       <section class="stats-band" aria-label="Prehled">
         <div>
           <strong id="totalListings">0</strong>
-          <span>aktivnich inzeratu</span>
+          <span>aktivnich ukazek</span>
         </div>
         <div>
           <strong>15</strong>
@@ -64,395 +64,25 @@
         </div>
       </section>
 
-      <section class="market-layout" id="nabidka">
-        <aside class="filters" aria-label="Filtry vozidel">
-          <div class="section-heading">
-            <p class="eyebrow">Vyber auta</p>
-            <h2>Filtry</h2>
-          </div>
-          <form id="filtersForm">
-            <label>
-              Znacka
-              <select id="brandFilter"></select>
-            </label>
-            <label>
-              Model
-              <input id="modelFilter" type="search" list="modelSuggestions" placeholder="Octavia, Golf..." />
-              <datalist id="modelSuggestions"></datalist>
-            </label>
-            <div class="input-grid">
-              <label>
-                Cena od
-                <input id="priceMinFilter" type="number" min="0" step="10000" />
-              </label>
-              <label>
-                Cena do
-                <input id="priceMaxFilter" type="number" min="0" step="10000" />
-              </label>
-            </div>
-            <div class="input-grid">
-              <label>
-                Rok od
-                <input id="yearMinFilter" type="number" min="1980" max="2026" />
-              </label>
-              <label>
-                Rok do
-                <input id="yearMaxFilter" type="number" min="1980" max="2026" />
-              </label>
-            </div>
-            <label>
-              Najeto do
-              <input id="mileageMaxFilter" type="number" min="0" step="5000" />
-            </label>
-            <label>
-              Palivo
-              <select id="fuelFilter"></select>
-            </label>
-            <label>
-              Prevodovka
-              <select id="transmissionFilter"></select>
-            </label>
-            <label>
-              Kraj
-              <select id="regionFilter"></select>
-            </label>
-            <label class="checkbox-row">
-              <input id="noCrashFilter" type="checkbox" />
-              Pouze nebourane
-            </label>
-            <div class="filter-actions">
-              <button class="primary-button" type="submit">Pouzit filtry</button>
-              <button class="text-button" id="resetFilters" type="button">Vymazat</button>
-            </div>
-          </form>
-        </aside>
-
-        <section class="listings-panel">
-          <div class="listings-head">
-            <div>
-              <p class="eyebrow">Aktualni nabidka</p>
-              <h2 id="resultCount">Nabidka aut</h2>
-            </div>
-            <label class="sort-control">
-              Seradit
-              <select id="sortSelect">
-                <option value="newest">Nejnovejsi</option>
-                <option value="priceAsc">Cena od nejlevnejsi</option>
-                <option value="priceDesc">Cena od nejdrazsi</option>
-                <option value="yearDesc">Rok od nejnovejsi</option>
-                <option value="mileageAsc">Najeto nejmene</option>
-              </select>
-            </label>
-          </div>
-          <button class="ghost-button mobile-filter-button" id="mobileFilterButton" type="button">Otevrit filtry</button>
-          <div class="listing-grid" id="listingGrid"></div>
-          <div class="empty-state" id="emptyState" hidden>
-            <h3>Zadne auto neodpovida filtru</h3>
-            <p>Zkuste upravit cenu, rok nebo znacku.</p>
-          </div>
-        </section>
-      </section>
-
-      <section class="seller-section" id="prodej">
-        <div class="seller-copy">
-          <p class="eyebrow">Prodej auta</p>
+      <section class="feature-links">
+        <article>
+          <p class="eyebrow">Katalog</p>
+          <h2>Nabidka aut</h2>
+          <p>Samostatna stranka s filtry, razenim, detailem auta a porovnanim.</p>
+          <a class="primary-button" href="./nabidka.html">Otevrit nabidku</a>
+        </article>
+        <article>
+          <p class="eyebrow">Prodej</p>
           <h2>Pridat inzerat</h2>
-          <p>
-            Vyplnte zakladni parametry, kontakt a nahrajte fotky. Inzerat se v demo verzi ulozi
-            do tohoto prohlizece a hned se objevi v nabidce.
-          </p>
-          <div class="seller-steps" aria-label="Kroky pridani inzeratu">
-            <span>1 Vozidlo</span>
-            <span>2 Parametry</span>
-            <span>3 Kontakt</span>
-            <span>4 Fotky</span>
-          </div>
-        </div>
-        <form class="seller-form" id="listingForm">
-          <div class="form-block">
-            <h3>Vozidlo</h3>
-          <div class="form-row">
-            <label>
-              Znacka
-              <select id="brandInput" required></select>
-            </label>
-            <label>
-              Model
-              <input id="modelInput" type="text" list="sellerModelSuggestions" required placeholder="Octavia" />
-              <datalist id="sellerModelSuggestions"></datalist>
-            </label>
-          </div>
-          </div>
-          <div class="form-block">
-            <h3>Parametry a cena</h3>
-          <div class="form-row">
-            <label>
-              Rok vyroby
-              <input id="yearInput" type="number" min="1980" max="2026" required />
-            </label>
-            <label>
-              Cena v Kc
-              <input id="priceInput" type="number" min="0" step="1000" required />
-            </label>
-          </div>
-          <div class="form-row">
-            <label>
-              Najeto km
-              <input id="mileageInput" type="number" min="0" step="1000" required />
-            </label>
-            <label>
-              Vykon kW
-              <input id="powerInput" type="number" min="1" step="1" />
-            </label>
-          </div>
-          <div class="form-row">
-            <label>
-              Palivo
-              <select id="fuelInput" required></select>
-            </label>
-            <label>
-              Prevodovka
-              <select id="transmissionInput" required></select>
-            </label>
-          </div>
-          <div class="form-row">
-            <label>
-              Karoserie
-              <select id="bodyInput" required></select>
-            </label>
-            <label>
-              Kraj
-              <select id="regionInput" required></select>
-            </label>
-          </div>
-          <div class="form-row">
-            <label>
-              Barva
-              <input id="colorInput" type="text" placeholder="Bila" />
-            </label>
-            <label>
-              STK do
-              <input id="inspectionInput" type="month" />
-            </label>
-          </div>
-          <div class="form-row">
-            <label>
-              VIN
-              <input id="vinInput" type="text" maxlength="17" placeholder="Volitelne" />
-            </label>
-            <label>
-              Pocet majitelu
-              <input id="ownersInput" type="number" min="1" max="20" />
-            </label>
-          </div>
-          <div class="form-row">
-            <label>
-              Telefon
-              <input id="phoneInput" type="tel" required placeholder="+420 777 123 456" />
-            </label>
-            <label>
-              E-mail
-              <input id="emailInput" type="email" required placeholder="prodejce@email.cz" />
-            </label>
-          </div>
-          <div class="switch-row">
-            <label><input id="vatInput" type="checkbox" /> Mozny odpocet DPH</label>
-            <label><input id="crashedInput" type="checkbox" /> Bourane / opravovane</label>
-          </div>
-          </div>
-          <div class="form-block">
-            <h3>Kontakt a popis</h3>
-          <div class="form-row">
-            <label>
-              Jmeno prodejce
-              <input id="sellerNameInput" type="text" placeholder="Jan Novak / Auto Praha" />
-            </label>
-            <label>
-              Typ prodejce
-              <select id="sellerTypeInput">
-                <option value="Soukromy prodejce">Soukromy prodejce</option>
-                <option value="Autobazar">Autobazar</option>
-                <option value="Dealer">Dealer</option>
-              </select>
-            </label>
-          </div>
-          <div class="switch-row">
-            <label><input id="verifiedPhoneInput" type="checkbox" checked /> Overeny telefon</label>
-            <label><input id="verifiedEmailInput" type="checkbox" checked /> Overeny e-mail</label>
-            <label><input id="serviceBookInput" type="checkbox" /> Servisni historie</label>
-          </div>
-          <label>
-            Popis
-            <textarea id="descriptionInput" rows="5" required placeholder="Stav vozu, servis, vybava..."></textarea>
-          </label>
-          </div>
-          <div class="form-block">
-            <h3>Fotky</h3>
-          <label class="upload-box">
-            <span>Nahrat fotky auta</span>
-            <small>Maximalne 15 fotek. Prvni fotka bude hlavni.</small>
-            <input id="photosInput" type="file" accept="image/*" multiple />
-          </label>
-          <div class="photo-preview" id="photoPreview" aria-live="polite"></div>
-          </div>
-          <button class="primary-button wide" type="submit">Zverejnit inzerat</button>
-        </form>
-      </section>
-
-      <section class="trust-section" id="bezpecnost">
-        <div>
-          <p class="eyebrow">Duveryhodnost</p>
-          <h2>Bezpecnejsi AutoMarket</h2>
-          <p>
-            Zatim je to demo, ale web uz pocita s overenim telefonu, e-mailu, VIN, servisni historii,
-            nahlasenim podezreleho inzeratu a prehlednym hodnocenim duvery.
-          </p>
-        </div>
-        <div class="trust-grid">
-          <article>
-            <strong>Overeny kontakt</strong>
-            <span>Telefon a e-mail u prodejce budou jasne oznacene.</span>
-          </article>
-          <article>
-            <strong>Kontrola inzeratu</strong>
-            <span>VIN, STK, bourane/nebourane a servisni historie na jednom miste.</span>
-          </article>
-          <article>
-            <strong>Nahlaseni</strong>
-            <span>Kupujici muze oznacit podezrely inzerat pro kontrolu.</span>
-          </article>
-          <article>
-            <strong>Historie ceny</strong>
-            <span>Pozdeji ukazeme zlevneni a predchozi cenu auta.</span>
-          </article>
-        </div>
-      </section>
-
-      <section class="account-section" id="ucet">
-        <div class="account-head">
-          <div>
-            <p class="eyebrow">Vas ucet</p>
-            <h2>Muj AutoMarket</h2>
-          </div>
-          <button class="ghost-button" id="accountPanelButton" type="button">Prihlasit / upravit profil</button>
-        </div>
-
-        <div class="account-summary" id="accountSummary"></div>
-
-        <div class="tabs" role="tablist" aria-label="Sekce uctu">
-          <button class="tab-button active" data-tab="saved" type="button">Ulozene</button>
-          <button class="tab-button" data-tab="compare" type="button">Porovnani</button>
-          <button class="tab-button" data-tab="alerts" type="button">Hlidani</button>
-          <button class="tab-button" data-tab="messages" type="button">Zpravy</button>
-          <button class="tab-button" data-tab="notes" type="button">Poznamky</button>
-          <button class="tab-button" data-tab="history" type="button">Historie</button>
-          <button class="tab-button" data-tab="seller" type="button">Moje inzeraty</button>
-          <button class="tab-button" data-tab="billing" type="button">Propagace</button>
-        </div>
-
-        <div class="tab-panel active" data-panel="saved">
-          <div class="saved-grid" id="savedGrid"></div>
-          <div class="empty-state" id="savedEmpty">
-            <h3>Zatim nemate ulozene zadne auto</h3>
-            <p>U inzeratu kliknete na ulozit a vratite se k nemu pozdeji.</p>
-          </div>
-        </div>
-
-        <div class="tab-panel" data-panel="compare">
-          <div class="compare-grid" id="compareGrid"></div>
-          <div class="empty-state" id="compareEmpty">
-            <h3>Porovnani je prazdne</h3>
-            <p>U inzeratu kliknete na porovnat a auta se zobrazí vedle sebe.</p>
-          </div>
-        </div>
-
-        <div class="tab-panel" data-panel="alerts">
-          <form class="compact-form" id="alertForm">
-            <div class="form-row">
-              <label>
-                Nazev hlidani
-                <input id="alertName" type="text" required placeholder="Rodinne SUV do 600 000 Kc" />
-              </label>
-              <label>
-                Znacka
-                <select id="alertBrand"></select>
-              </label>
-            </div>
-            <div class="form-row">
-              <label>
-                Cena do
-                <input id="alertPrice" type="number" min="0" step="10000" placeholder="600000" />
-              </label>
-              <label>
-                Najeto do
-                <input id="alertMileage" type="number" min="0" step="5000" placeholder="120000" />
-              </label>
-            </div>
-            <button class="primary-button" type="submit">Vytvorit hlidani</button>
-          </form>
-          <div class="list-stack" id="alertsList"></div>
-        </div>
-
-        <div class="tab-panel" data-panel="messages">
-          <div class="list-stack" id="messagesList"></div>
-          <div class="empty-state" id="messagesEmpty">
-            <h3>Zatim zadne zpravy</h3>
-            <p>V detailu inzeratu muzete prodejci poslat demo zpravu.</p>
-          </div>
-        </div>
-
-        <div class="tab-panel" data-panel="notes">
-          <div class="list-stack" id="notesList"></div>
-          <div class="empty-state" id="notesEmpty">
-            <h3>Zatim zadne poznamky</h3>
-            <p>U detailu auta si muzete ulozit vlastni poznamku.</p>
-          </div>
-        </div>
-
-        <div class="tab-panel" data-panel="history">
-          <div class="saved-grid" id="historyGrid"></div>
-          <div class="empty-state" id="historyEmpty">
-            <h3>Historie je prazdna</h3>
-            <p>Po otevreni detailu se auta ulozi do historie prohlizeni.</p>
-          </div>
-        </div>
-
-        <div class="tab-panel" data-panel="seller">
-          <div class="seller-tools">
-            <a class="primary-button" href="#prodej">Pridat dalsi inzerat</a>
-            <button class="ghost-button" id="createDemoMine" type="button">Vytvorit demo muj inzerat</button>
-          </div>
-          <div class="list-stack" id="sellerListings"></div>
-          <div class="empty-state" id="sellerEmpty">
-            <h3>Zatim nemate vlastni inzerat</h3>
-            <p>Po pridani se tady objevi sprava, statistiky a stav prodeje.</p>
-          </div>
-        </div>
-
-        <div class="tab-panel" data-panel="billing">
-          <div class="promo-grid">
-            <article class="promo-card">
-              <h3>Zvyrazneni</h3>
-              <p>Inzerat dostane stitek TOP a vyssi prioritu v nabidce.</p>
-              <strong>149 Kc / 7 dni</strong>
-            </article>
-            <article class="promo-card">
-              <h3>TOP pozice</h3>
-              <p>Auto se zobrazi mezi prvnimi vysledky ve vyhledavani.</p>
-              <strong>299 Kc / 7 dni</strong>
-            </article>
-            <article class="promo-card">
-              <h3>Overeny prodejce</h3>
-              <p>Profil dostane overeni a duveryhodnejsi kontakt pro kupujici.</p>
-              <strong>990 Kc / mesic</strong>
-            </article>
-          </div>
-          <div class="invoice-box">
-            <h3>Demo fakturace</h3>
-            <p>Faktury a platby se v realne verzi napoji na platebni branu.</p>
-            <button class="ghost-button" id="fakeInvoice" type="button">Vygenerovat demo fakturu</button>
-          </div>
-        </div>
+          <p>Formular rozdeleny na vozidlo, parametry, kontakt a fotky.</p>
+          <a class="ghost-button" href="./prodej.html">Prodat auto</a>
+        </article>
+        <article>
+          <p class="eyebrow">Ucet</p>
+          <h2>Muj AutoMarket</h2>
+          <p>Ulozene vozy, porovnani, hlidani, zpravy, poznamky a moje inzeraty.</p>
+          <a class="ghost-button" href="./ucet.html">Otevrit ucet</a>
+        </article>
       </section>
     </main>
 
@@ -472,13 +102,6 @@
         </label>
         <button class="primary-button wide" type="submit">Pokracovat</button>
       </form>
-    </dialog>
-
-    <dialog class="modal" id="detailModal">
-      <article class="detail-card">
-        <button class="close-button" id="closeDetail" type="button" aria-label="Zavrit">x</button>
-        <div id="detailContent"></div>
-      </article>
     </dialog>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>

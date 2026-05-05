@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prodat auto | AutoMarket</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./index.html"><span class="brand-mark">AM</span><span>AutoMarket</span></a>
+      <nav class="nav" aria-label="Hlavni navigace">
+        <a href="./nabidka.html">Nabidka</a>
+        <a href="./prodej.html">Prodat auto</a>
+        <a href="./ucet.html">Muj ucet</a>
+        <a href="./bezpecnost.html">Bezpecnost</a>
+      </nav>
+      <button class="ghost-button" id="accountButton" type="button">Prihlasit</button>
+    </header>
+
+    <main>
+      <section class="seller-section">
+        <div class="seller-copy">
+          <p class="eyebrow">Prodej auta</p>
+          <h1>Pridat inzerat</h1>
+          <p>Vyplnte parametry, kontakt a nahrajte fotky. Demo inzerat se ulozi do tohoto prohlizece.</p>
+          <div class="seller-steps"><span>1 Vozidlo</span><span>2 Parametry</span><span>3 Kontakt</span><span>4 Fotky</span></div>
+        </div>
+        <form class="seller-form" id="listingForm">
+          <div class="form-block">
+            <h3>Vozidlo</h3>
+            <div class="form-row">
+              <label>Znacka <select id="brandInput" required></select></label>
+              <label>Model <input id="modelInput" type="text" list="sellerModelSuggestions" required placeholder="Octavia" /><datalist id="sellerModelSuggestions"></datalist></label>
+            </div>
+          </div>
+          <div class="form-block">
+            <h3>Parametry a cena</h3>
+            <div class="form-row">
+              <label>Rok vyroby <input id="yearInput" type="number" min="1980" max="2026" required /></label>
+              <label>Cena v Kc <input id="priceInput" type="number" min="0" step="1000" required /></label>
+            </div>
+            <div class="form-row">
+              <label>Najeto km <input id="mileageInput" type="number" min="0" step="1000" required /></label>
+              <label>Vykon kW <input id="powerInput" type="number" min="1" step="1" /></label>
+            </div>
+            <div class="form-row">
+              <label>Palivo <select id="fuelInput" required></select></label>
+              <label>Prevodovka <select id="transmissionInput" required></select></label>
+            </div>
+            <div class="form-row">
+              <label>Karoserie <select id="bodyInput" required></select></label>
+              <label>Kraj <select id="regionInput" required></select></label>
+            </div>
+            <div class="form-row">
+              <label>Barva <input id="colorInput" type="text" placeholder="Bila" /></label>
+              <label>STK do <input id="inspectionInput" type="month" /></label>
+            </div>
+            <div class="form-row">
+              <label>VIN <input id="vinInput" type="text" maxlength="17" placeholder="Volitelne" /></label>
+              <label>Pocet majitelu <input id="ownersInput" type="number" min="1" max="20" /></label>
+            </div>
+            <div class="switch-row">
+              <label><input id="vatInput" type="checkbox" /> Mozny odpocet DPH</label>
+              <label><input id="crashedInput" type="checkbox" /> Bourane / opravovane</label>
+            </div>
+          </div>
+          <div class="form-block">
+            <h3>Kontakt a popis</h3>
+            <div class="form-row">
+              <label>Telefon <input id="phoneInput" type="tel" required placeholder="+420 777 123 456" /></label>
+              <label>E-mail <input id="emailInput" type="email" required placeholder="prodejce@email.cz" /></label>
+            </div>
+            <div class="form-row">
+              <label>Jmeno prodejce <input id="sellerNameInput" type="text" placeholder="Jan Novak / Auto Praha" /></label>
+              <label>Typ prodejce <select id="sellerTypeInput"><option value="Soukromy prodejce">Soukromy prodejce</option><option value="Autobazar">Autobazar</option><option value="Dealer">Dealer</option></select></label>
+            </div>
+            <div class="switch-row">
+              <label><input id="verifiedPhoneInput" type="checkbox" checked /> Overeny telefon</label>
+              <label><input id="verifiedEmailInput" type="checkbox" checked /> Overeny e-mail</label>
+              <label><input id="serviceBookInput" type="checkbox" /> Servisni historie</label>
+            </div>
+            <label>Popis <textarea id="descriptionInput" rows="5" required placeholder="Stav vozu, servis, vybava..."></textarea></label>
+          </div>
+          <div class="form-block">
+            <h3>Fotky</h3>
+            <label class="upload-box"><span>Nahrat fotky auta</span><small>Maximalne 15 fotek. Prvni fotka bude hlavni.</small><input id="photosInput" type="file" accept="image/*" multiple /></label>
+            <div class="photo-preview" id="photoPreview" aria-live="polite"></div>
+          </div>
+          <button class="primary-button wide" type="submit">Zverejnit inzerat</button>
+        </form>
+      </section>
+    </main>
+
+    <dialog class="modal" id="accountModal">
+      <form method="dialog" class="modal-card" id="accountForm">
+        <button class="close-button" id="closeAccount" type="button" aria-label="Zavrit">x</button>
+        <p class="eyebrow">Demo ucet</p>
+        <h2>Prihlaseni</h2>
+        <p>Zadejte telefon a e-mail. Pro demo neni potreba heslo.</p>
+        <label>Telefon <input id="loginPhone" type="tel" required placeholder="+420 777 123 456" /></label>
+        <label>E-mail <input id="loginEmail" type="email" required placeholder="vas@email.cz" /></label>
+        <button class="primary-button wide" type="submit">Pokracovat</button>
+      </form>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>

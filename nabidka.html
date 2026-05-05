@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nabidka aut | AutoMarket</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./index.html"><span class="brand-mark">AM</span><span>AutoMarket</span></a>
+      <nav class="nav" aria-label="Hlavni navigace">
+        <a href="./nabidka.html">Nabidka</a>
+        <a href="./prodej.html">Prodat auto</a>
+        <a href="./ucet.html">Muj ucet</a>
+        <a href="./bezpecnost.html">Bezpecnost</a>
+      </nav>
+      <button class="ghost-button" id="accountButton" type="button">Prihlasit</button>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <p class="eyebrow">Aktualni nabidka</p>
+        <h1>Nabidka aut</h1>
+        <p>Filtrujte podle znacky, modelu, ceny, roku, najezdu, paliva, prevodovky a kraje.</p>
+      </section>
+
+      <section class="market-layout">
+        <aside class="filters" aria-label="Filtry vozidel">
+          <div class="section-heading">
+            <p class="eyebrow">Vyber auta</p>
+            <h2>Filtry</h2>
+          </div>
+          <form id="filtersForm">
+            <label>Znacka <select id="brandFilter"></select></label>
+            <label>
+              Model
+              <input id="modelFilter" type="search" list="modelSuggestions" placeholder="Octavia, Golf..." />
+              <datalist id="modelSuggestions"></datalist>
+            </label>
+            <div class="input-grid">
+              <label>Cena od <input id="priceMinFilter" type="number" min="0" step="10000" /></label>
+              <label>Cena do <input id="priceMaxFilter" type="number" min="0" step="10000" /></label>
+            </div>
+            <div class="input-grid">
+              <label>Rok od <input id="yearMinFilter" type="number" min="1980" max="2026" /></label>
+              <label>Rok do <input id="yearMaxFilter" type="number" min="1980" max="2026" /></label>
+            </div>
+            <label>Najeto do <input id="mileageMaxFilter" type="number" min="0" step="5000" /></label>
+            <label>Palivo <select id="fuelFilter"></select></label>
+            <label>Prevodovka <select id="transmissionFilter"></select></label>
+            <label>Kraj <select id="regionFilter"></select></label>
+            <label class="checkbox-row"><input id="noCrashFilter" type="checkbox" /> Pouze nebourane</label>
+            <div class="filter-actions">
+              <button class="primary-button" type="submit">Pouzit filtry</button>
+              <button class="text-button" id="resetFilters" type="button">Vymazat</button>
+            </div>
+          </form>
+        </aside>
+
+        <section class="listings-panel">
+          <div class="listings-head">
+            <div>
+              <p class="eyebrow">Katalog</p>
+              <h2 id="resultCount">Nabidka aut</h2>
+            </div>
+            <label class="sort-control">
+              Seradit
+              <select id="sortSelect">
+                <option value="newest">Nejnovejsi</option>
+                <option value="priceAsc">Cena od nejlevnejsi</option>
+                <option value="priceDesc">Cena od nejdrazsi</option>
+                <option value="yearDesc">Rok od nejnovejsi</option>
+                <option value="mileageAsc">Najeto nejmene</option>
+              </select>
+            </label>
+          </div>
+          <button class="ghost-button mobile-filter-button" id="mobileFilterButton" type="button">Otevrit filtry</button>
+          <div class="listing-grid" id="listingGrid"></div>
+          <div class="empty-state" id="emptyState" hidden>
+            <h3>Zadne auto neodpovida filtru</h3>
+            <p>Zkuste upravit cenu, rok nebo znacku.</p>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <dialog class="modal" id="accountModal">
+      <form method="dialog" class="modal-card" id="accountForm">
+        <button class="close-button" id="closeAccount" type="button" aria-label="Zavrit">x</button>
+        <p class="eyebrow">Demo ucet</p>
+        <h2>Prihlaseni</h2>
+        <p>Zadejte telefon a e-mail. Pro demo neni potreba heslo.</p>
+        <label>Telefon <input id="loginPhone" type="tel" required placeholder="+420 777 123 456" /></label>
+        <label>E-mail <input id="loginEmail" type="email" required placeholder="vas@email.cz" /></label>
+        <button class="primary-button wide" type="submit">Pokracovat</button>
+      </form>
+    </dialog>
+    <dialog class="modal" id="detailModal">
+      <article class="detail-card">
+        <button class="close-button" id="closeDetail" type="button" aria-label="Zavrit">x</button>
+        <div id="detailContent"></div>
+      </article>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>

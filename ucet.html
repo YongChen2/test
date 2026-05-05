@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Muj ucet | AutoMarket</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./index.html"><span class="brand-mark">AM</span><span>AutoMarket</span></a>
+      <nav class="nav" aria-label="Hlavni navigace">
+        <a href="./nabidka.html">Nabidka</a>
+        <a href="./prodej.html">Prodat auto</a>
+        <a href="./ucet.html">Muj ucet</a>
+        <a href="./bezpecnost.html">Bezpecnost</a>
+      </nav>
+      <button class="ghost-button" id="accountButton" type="button">Prihlasit</button>
+    </header>
+
+    <main>
+      <section class="account-section">
+        <div class="account-head">
+          <div>
+            <p class="eyebrow">Vas ucet</p>
+            <h1>Muj AutoMarket</h1>
+          </div>
+          <button class="ghost-button" id="accountPanelButton" type="button">Prihlasit / upravit profil</button>
+        </div>
+        <div class="account-summary" id="accountSummary"></div>
+        <div class="tabs" role="tablist" aria-label="Sekce uctu">
+          <button class="tab-button active" data-tab="saved" type="button">Ulozene</button>
+          <button class="tab-button" data-tab="compare" type="button">Porovnani</button>
+          <button class="tab-button" data-tab="alerts" type="button">Hlidani</button>
+          <button class="tab-button" data-tab="messages" type="button">Zpravy</button>
+          <button class="tab-button" data-tab="notes" type="button">Poznamky</button>
+          <button class="tab-button" data-tab="history" type="button">Historie</button>
+          <button class="tab-button" data-tab="seller" type="button">Moje inzeraty</button>
+          <button class="tab-button" data-tab="billing" type="button">Propagace</button>
+        </div>
+        <div class="tab-panel active" data-panel="saved">
+          <div class="saved-grid" id="savedGrid"></div>
+          <div class="empty-state" id="savedEmpty"><h3>Zatim nemate ulozene zadne auto</h3><p>U inzeratu kliknete na ulozit.</p></div>
+        </div>
+        <div class="tab-panel" data-panel="compare">
+          <div class="compare-grid" id="compareGrid"></div>
+          <div class="empty-state" id="compareEmpty"><h3>Porovnani je prazdne</h3><p>V nabidce kliknete na porovnat.</p></div>
+        </div>
+        <div class="tab-panel" data-panel="alerts">
+          <form class="compact-form" id="alertForm">
+            <div class="form-row">
+              <label>Nazev hlidani <input id="alertName" type="text" required placeholder="Rodinne SUV do 600 000 Kc" /></label>
+              <label>Znacka <select id="alertBrand"></select></label>
+            </div>
+            <div class="form-row">
+              <label>Cena do <input id="alertPrice" type="number" min="0" step="10000" placeholder="600000" /></label>
+              <label>Najeto do <input id="alertMileage" type="number" min="0" step="5000" placeholder="120000" /></label>
+            </div>
+            <button class="primary-button" type="submit">Vytvorit hlidani</button>
+          </form>
+          <div class="list-stack" id="alertsList"></div>
+        </div>
+        <div class="tab-panel" data-panel="messages">
+          <div class="list-stack" id="messagesList"></div>
+          <div class="empty-state" id="messagesEmpty"><h3>Zatim zadne zpravy</h3><p>V detailu inzeratu muzete poslat demo zpravu.</p></div>
+        </div>
+        <div class="tab-panel" data-panel="notes">
+          <div class="list-stack" id="notesList"></div>
+          <div class="empty-state" id="notesEmpty"><h3>Zatim zadne poznamky</h3><p>U detailu auta si muzete ulozit poznamku.</p></div>
+        </div>
+        <div class="tab-panel" data-panel="history">
+          <div class="saved-grid" id="historyGrid"></div>
+          <div class="empty-state" id="historyEmpty"><h3>Historie je prazdna</h3><p>Po otevreni detailu se auta ulozi do historie.</p></div>
+        </div>
+        <div class="tab-panel" data-panel="seller">
+          <div class="seller-tools">
+            <a class="primary-button" href="./prodej.html">Pridat dalsi inzerat</a>
+            <button class="ghost-button" id="createDemoMine" type="button">Vytvorit demo muj inzerat</button>
+          </div>
+          <div class="list-stack" id="sellerListings"></div>
+          <div class="empty-state" id="sellerEmpty"><h3>Zatim nemate vlastni inzerat</h3><p>Po pridani se tady objevi sprava a statistiky.</p></div>
+        </div>
+        <div class="tab-panel" data-panel="billing">
+          <div class="promo-grid">
+            <article class="promo-card"><h3>Zvyrazneni</h3><p>Inzerat dostane stitek TOP.</p><strong>149 Kc / 7 dni</strong></article>
+            <article class="promo-card"><h3>TOP pozice</h3><p>Auto se zobrazi mezi prvnimi vysledky.</p><strong>299 Kc / 7 dni</strong></article>
+            <article class="promo-card"><h3>Overeny prodejce</h3><p>Profil dostane duveryhodnejsi oznaceni.</p><strong>990 Kc / mesic</strong></article>
+          </div>
+          <div class="invoice-box">
+            <h3>Demo fakturace</h3>
+            <p>Platby napojime pozdeji az s realnym backendem.</p>
+            <button class="ghost-button" id="fakeInvoice" type="button">Vygenerovat demo fakturu</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="modal" id="accountModal">
+      <form method="dialog" class="modal-card" id="accountForm">
+        <button class="close-button" id="closeAccount" type="button" aria-label="Zavrit">x</button>
+        <p class="eyebrow">Demo ucet</p>
+        <h2>Prihlaseni</h2>
+        <p>Zadejte telefon a e-mail. Pro demo neni potreba heslo.</p>
+        <label>Telefon <input id="loginPhone" type="tel" required placeholder="+420 777 123 456" /></label>
+        <label>E-mail <input id="loginEmail" type="email" required placeholder="vas@email.cz" /></label>
+        <button class="primary-button wide" type="submit">Pokracovat</button>
+      </form>
+    </dialog>
+    <dialog class="modal" id="detailModal">
+      <article class="detail-card">
+        <button class="close-button" id="closeDetail" type="button" aria-label="Zavrit">x</button>
+        <div id="detailContent"></div>
+      </article>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>

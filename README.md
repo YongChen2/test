@@ -4,6 +4,7 @@ Demo web pro ceskou inzerci aut.
 
 ## Co umi
 
+- vice strankova struktura: domovska stranka, nabidka, prodej auta, muj ucet a bezpecnost
 - prochazeni inzeratu aut
 - filtrovani podle znacky, modelu, ceny, roku, najezdu, paliva, prevodovky a kraje
 - napoveda modelu podle vybrane znacky
@@ -22,6 +23,6 @@ Demo web pro ceskou inzerci aut.
 
 ## Spusteni
 
-Otevrete soubor `index.html` v prohlizeci.
+Otevrete soubor `index.html` v prohlizeci nebo nasadte repozitar na Vercel.
 
 Tahle verze je demo bez serverove databaze. Data zustavaji v aktualnim prohlizeci.

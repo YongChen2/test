@@ -515,6 +515,7 @@ function byId(id) {
 }
 
 function fillSelect(select, values, includePlaceholder = false) {
+  if (!select) return;
   select.innerHTML = "";
   values.forEach((value, index) => {
     const option = document.createElement("option");
@@ -540,11 +541,12 @@ function initSelects() {
 }
 
 function updateModelSuggestions(brandSelectId, datalistId) {
-  const brand = byId(brandSelectId).value;
+  const brandSelect = byId(brandSelectId);
+  const datalist = byId(datalistId);
+  if (!brandSelect || !datalist) return;
+  const brand = brandSelect.value;
   const models = brandModels[brand] || Object.values(brandModels).flat();
-  byId(datalistId).innerHTML = models
-    .map((model) => `<option value="${model}"></option>`)
-    .join("");
+  datalist.innerHTML = models.map((model) => `<option value="${model}"></option>`).join("");
 }
 
 function getFilteredListings() {
@@ -576,7 +578,7 @@ function getFilteredListings() {
     );
   });
 
-  const sort = byId("sortSelect").value;
+  const sort = byId("sortSelect")?.value || "newest";
   listings.sort((a, b) => {
     if (sort === "priceAsc") return a.price - b.price;
     if (sort === "priceDesc") return b.price - a.price;
@@ -589,15 +591,28 @@ function getFilteredListings() {
 }
 
 function renderListings() {
+  if (!byId("listingGrid")) return;
+  applyUrlFilters();
   const listings = getFilteredListings();
   const grid = byId("listingGrid");
   grid.innerHTML = listings.map(renderCard).join("");
   byId("emptyState").hidden = listings.length > 0;
   byId("resultCount").textContent = `${listings.length} aut v nabidce`;
-  byId("totalListings").textContent = state.listings.length;
+  if (byId("totalListings")) byId("totalListings").textContent = state.listings.length;
+}
+
+function applyUrlFilters() {
+  const params = new URLSearchParams(window.location.search);
+  if (!params.size || state.urlFiltersApplied) return;
+  state.urlFiltersApplied = true;
+  if (params.get("brand") && byId("brandFilter")) byId("brandFilter").value = params.get("brand");
+  if (params.get("priceMax") && byId("priceMaxFilter")) byId("priceMaxFilter").value = params.get("priceMax");
+  updateModelSuggestions("brandFilter", "modelSuggestions");
+  collectFilters();
 }
 
 function renderSaved() {
+  if (!byId("savedGrid")) return;
   const savedListings = state.listings.filter((listing) => state.saved.includes(listing.id));
   const grid = byId("savedGrid");
   grid.innerHTML = savedListings.map(renderCard).join("");
@@ -605,6 +620,7 @@ function renderSaved() {
 }
 
 function renderAccount() {
+  if (!byId("accountSummary")) return;
   renderAccountSummary();
   renderSaved();
   renderCompare();
@@ -616,6 +632,7 @@ function renderAccount() {
 }
 
 function renderAccountSummary() {
+  if (!byId("accountSummary")) return;
   const mine = getMyListings();
   const views = mine.reduce((sum, car) => sum + listingStats(car).views, 0);
   byId("accountSummary").innerHTML = `
@@ -647,6 +664,7 @@ function renderAccountSummary() {
 }
 
 function renderCompare() {
+  if (!byId("compareGrid")) return;
   const cars = state.compare.map(findListing).filter(Boolean);
   const grid = byId("compareGrid");
   grid.innerHTML = cars
@@ -672,6 +690,7 @@ function renderCompare() {
 }
 
 function renderAlerts() {
+  if (!byId("alertsList")) return;
   byId("alertsList").innerHTML =
     state.alerts
       .map((alert) => {
@@ -695,6 +714,7 @@ function renderAlerts() {
 }
 
 function renderMessages() {
+  if (!byId("messagesList")) return;
   byId("messagesList").innerHTML = state.messages
     .map((message) => {
       const car = findListing(message.listingId);
@@ -714,6 +734,7 @@ function renderMessages() {
 }
 
 function renderNotes() {
+  if (!byId("notesList")) return;
   byId("notesList").innerHTML = state.notes
     .map((note) => {
       const car = findListing(note.listingId);
@@ -733,12 +754,14 @@ function renderNotes() {
 }
 
 function renderHistory() {
+  if (!byId("historyGrid")) return;
   const cars = state.history.map(findListing).filter(Boolean);
   byId("historyGrid").innerHTML = cars.map(renderCard).join("");
   byId("historyEmpty").hidden = cars.length > 0;
 }
 
 function renderSellerListings() {
+  if (!byId("sellerListings")) return;
   const mine = getMyListings();
   byId("sellerListings").innerHTML = mine
     .map((car) => {
@@ -821,17 +844,17 @@ function renderCard(car) {
 
 function collectFilters() {
   state.filters = {
-    brand: byId("brandFilter").value,
-    model: byId("modelFilter").value.trim(),
+    brand: byId("brandFilter")?.value || "",
+    model: byId("modelFilter")?.value.trim() || "",
     priceMin: readNumber("priceMinFilter"),
     priceMax: readNumber("priceMaxFilter"),
     yearMin: readNumber("yearMinFilter"),
     yearMax: readNumber("yearMaxFilter"),
     mileageMax: readNumber("mileageMaxFilter"),
-    fuel: byId("fuelFilter").value,
-    transmission: byId("transmissionFilter").value,
-    region: byId("regionFilter").value,
-    noCrash: byId("noCrashFilter").checked,
+    fuel: byId("fuelFilter")?.value || "",
+    transmission: byId("transmissionFilter")?.value || "",
+    region: byId("regionFilter")?.value || "",
+    noCrash: byId("noCrashFilter")?.checked || false,
   };
 }
 
@@ -841,7 +864,7 @@ function readNumber(id) {
 }
 
 function resetFilters() {
-  byId("filtersForm").reset();
+  byId("filtersForm")?.reset();
   state.filters = {};
   renderListings();
 }
@@ -1002,11 +1025,12 @@ function makeId() {
 }
 
 function openAccount() {
-  byId("accountModal").showModal();
+  byId("accountModal")?.showModal();
 }
 
 function updateAccountButton() {
   const button = byId("accountButton");
+  if (!button) return;
   button.textContent = state.user ? state.user.email : "Prihlasit";
 }
 
@@ -1019,7 +1043,7 @@ function handleAccountSubmit(event) {
   save("automarketUser", state.user);
   updateAccountButton();
   renderAccount();
-  byId("accountModal").close();
+  byId("accountModal")?.close();
   toast("Demo ucet je pripraveny.");
 }
 
@@ -1042,6 +1066,7 @@ function fileToDataUrl(file) {
 }
 
 function renderPhotoPreview() {
+  if (!byId("photoPreview")) return;
   byId("photoPreview").innerHTML = state.selectedPhotos
     .map((photo, index) => `<img src="${photo}" alt="Nahrana fotka ${index + 1}" />`)
     .join("");
@@ -1098,7 +1123,7 @@ function handleListingSubmit(event) {
   resetFilters();
   renderAccount();
   toast("Inzerat byl zverejneny v demo nabidce.");
-  location.hash = "#nabidka";
+  window.location.href = "nabidka.html";
 }
 
 function saveCustomListings() {
@@ -1259,42 +1284,44 @@ function switchTab(tab) {
   });
 }
 
+function on(id, eventName, handler) {
+  byId(id)?.addEventListener(eventName, handler);
+}
+
 function bindEvents() {
-  byId("filtersForm").addEventListener("submit", (event) => {
+  on("filtersForm", "submit", (event) => {
     event.preventDefault();
     collectFilters();
     renderListings();
     document.body.classList.remove("filters-open");
   });
-  byId("resetFilters").addEventListener("click", () => {
+  on("resetFilters", "click", () => {
     resetFilters();
     document.body.classList.remove("filters-open");
   });
-  byId("sortSelect").addEventListener("change", renderListings);
-  byId("brandFilter").addEventListener("change", () => updateModelSuggestions("brandFilter", "modelSuggestions"));
-  byId("brandInput").addEventListener("change", () => updateModelSuggestions("brandInput", "sellerModelSuggestions"));
-  byId("mobileFilterButton").addEventListener("click", () => {
+  on("sortSelect", "change", renderListings);
+  on("brandFilter", "change", () => updateModelSuggestions("brandFilter", "modelSuggestions"));
+  on("brandInput", "change", () => updateModelSuggestions("brandInput", "sellerModelSuggestions"));
+  on("mobileFilterButton", "click", () => {
     document.body.classList.toggle("filters-open");
   });
-  byId("quickSearchForm").addEventListener("submit", (event) => {
+  on("quickSearchForm", "submit", (event) => {
     event.preventDefault();
-    byId("brandFilter").value = byId("quickBrand").value;
-    byId("priceMaxFilter").value = byId("quickPrice").value;
-    updateModelSuggestions("brandFilter", "modelSuggestions");
-    collectFilters();
-    renderListings();
-    location.hash = "#nabidka";
+    const params = new URLSearchParams();
+    if (byId("quickBrand")?.value) params.set("brand", byId("quickBrand").value);
+    if (byId("quickPrice")?.value) params.set("priceMax", byId("quickPrice").value);
+    window.location.href = `nabidka.html${params.toString() ? `?${params}` : ""}`;
   });
-  byId("accountButton").addEventListener("click", openAccount);
-  byId("accountPanelButton").addEventListener("click", openAccount);
-  byId("accountForm").addEventListener("submit", handleAccountSubmit);
-  byId("closeAccount").addEventListener("click", () => byId("accountModal").close());
-  byId("photosInput").addEventListener("change", handlePhotos);
-  byId("listingForm").addEventListener("submit", handleListingSubmit);
-  byId("alertForm").addEventListener("submit", handleAlertSubmit);
-  byId("createDemoMine").addEventListener("click", createDemoMine);
-  byId("fakeInvoice").addEventListener("click", () => toast("Demo faktura AM-2026-001 je pripravena."));
-  byId("closeDetail").addEventListener("click", () => byId("detailModal").close());
+  on("accountButton", "click", openAccount);
+  on("accountPanelButton", "click", openAccount);
+  on("accountForm", "submit", handleAccountSubmit);
+  on("closeAccount", "click", () => byId("accountModal")?.close());
+  on("photosInput", "change", handlePhotos);
+  on("listingForm", "submit", handleListingSubmit);
+  on("alertForm", "submit", handleAlertSubmit);
+  on("createDemoMine", "click", createDemoMine);
+  on("fakeInvoice", "click", () => toast("Demo faktura AM-2026-001 je pripravena."));
+  on("closeDetail", "click", () => byId("detailModal")?.close());
 
   document.addEventListener("click", (event) => {
     const saveButton = event.target.closest("[data-save]");
@@ -1342,6 +1369,7 @@ function boot() {
   initSelects();
   bindEvents();
   updateAccountButton();
+  if (byId("totalListings")) byId("totalListings").textContent = state.listings.length;
   renderListings();
   renderAccount();
   switchTab(state.activeTab);
